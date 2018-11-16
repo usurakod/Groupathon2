@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Thu Nov 15 20:06:42 PST 2018
+0.baseType=DIRECTORY
+0.base=/Users/umasurakod/Documents/MobileApp/MOB_APP/Groupathon/Groupathon/app/build/intermediates/transforms/dexMerger/debug/0
+0.path=classes.dex
+0.set=DEX
+count=1

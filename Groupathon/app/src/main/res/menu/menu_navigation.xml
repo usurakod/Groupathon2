@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mygroups"
+        android:icon="@mipmap/networking"
+        android:title="My Groups"/>
+
+    <item android:id="@+id/Notifications"
+        android:icon="@mipmap/bell"
+        android:title="Notifications"/>
+
+    <item android:id="@+id/Settings"
+        android:icon="@mipmap/settings"
+        android:title="Settings"/>
+
+    <item android:id="@+id/Logout"
+        android:icon="@mipmap/logout_color"
+        android:title="Logout"/>
+
+</menu>

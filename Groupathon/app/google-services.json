@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "21747222747",
+    "firebase_url": "https://groupathon.firebaseio.com",
+    "project_id": "groupathon",
+    "storage_bucket": "groupathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21747222747:android:4d2c10ff6f60ffd0",
+        "android_client_info": {
+          "package_name": "com.example.umasurakod.groupathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21747222747-dftbs5j834901orp3kg51rd4jnf5i97t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2S82VAtg3xr8exqjgVyFthQyHaOxbTKM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

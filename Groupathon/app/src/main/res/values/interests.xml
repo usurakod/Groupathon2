@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="interests">
+        <item>music</item>
+        <item>hacking</item>
+        <item>hiking</item>
+        <item>sports</item>
+        <item>photography</item>
+        <item>others</item>
+    </string-array>
+</resources>

@@ -42,6 +42,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
         String getName=grpName.getText().toString();
         Intent intent = new Intent(this,Group_details.class);
         intent.putExtra("GrpDetails",getDetails);
+        intent.putExtra("GrpName",getName);
         startActivity(intent);
     }
 

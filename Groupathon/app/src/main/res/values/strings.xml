@@ -2,13 +2,13 @@
 
     <string name="app_name">Groupathon</string>
     <string-array name="titles">
-        <item>Title 1</item>
-        <item>Title 2</item>
-        <item>Title 3</item>
-        <item>Title 4</item>
-        <item>Title 5</item>
-        <item>Title 6</item>
-        <item>Title 7</item>
+        <item>Group 1</item>
+        <item>Group 2</item>
+        <item>Group 3</item>
+        <item>Group 4</item>
+        <item>Group 5</item>
+        <item>Group 6</item>
+        <item>Group 7</item>
     </string-array>
     <string-array name="description">
         <item>Desc 1</item>
@@ -18,6 +18,34 @@
         <item>Desc 5</item>
         <item>Desc 6</item>
         <item>Desc 7</item>
+    </string-array>
+    <string-array name="members">
+        <item>Member 1</item>
+        <item>Member 2</item>
+        <item>Member 3</item>
+        <item>Member 4</item>
+        <item>Member 5</item>
+        <item>Member 6</item>
+        <item>Member 7</item>
+        <item>Member 8</item>
+        <item>Member 9</item>
+        <item>Member 10</item>
+        <item>Member 11</item>
+        <item>Member 12</item>
+    </string-array>
+    <string-array name="items">
+        <item>Item 1</item>
+        <item>Item 2</item>
+        <item>Item 3</item>
+        <item>Item 4</item>
+        <item>Item 5</item>
+        <item>Item 6</item>
+        <item>Item 7</item>
+        <item>Item 8</item>
+        <item>Item 9</item>
+        <item>Item 10</item>
+        <item>Item 11</item>
+        <item>Item 12</item>
     </string-array>
     <string name="open">Open</string>
     <string name="close">Close</string>

@@ -24,9 +24,10 @@
         <activity android:name=".AccountActivity.ResetPasswordActivity" />
         <activity android:name=".create_group" />
         <activity android:name=".AccountActivity.SettingActivity" />
-        <activity android:name=".Group_details"/>
-        <activity android:name=".Group_members"/>
-        <activity android:name=".Group_itemchecklist"/>
+        <activity android:name=".Group_details" />
+        <activity android:name=".Group_members" />
+        <activity android:name=".Group_itemchecklist" />
+        <activity android:name=".my_grouplist"></activity>
     </application>
 
 </manifest>

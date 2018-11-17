@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         Resources res = getResources();
         titles=res.getStringArray(R.array.titles);
         descriptions = res.getStringArray(R.array.description);
-
         events = findViewById(R.id.events);
         SushAdapter adapter = new SushAdapter(this, titles, descriptions, images);
         events.setAdapter(adapter);
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     signOut();
 
                 } else if (id == R.id.mygroups) {
-                    Intent intent = new Intent(getApplicationContext(), Group_details.class);
+                    Intent intent = new Intent(getApplicationContext(), my_grouplist.class);
                     startActivity(intent);
 
                 } else if (id == R.id.Notifications) {
@@ -183,8 +182,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void signOut() {
         auth.signOut();
-
-
 //        FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
 //            @Override
 //            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -271,8 +268,6 @@ public class MainActivity extends AppCompatActivity {
             this.descriptionArray = descriptions;
             this.images = imgs;
         }
-
-
     }
     private void openGallery(){
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);

@@ -27,7 +27,7 @@
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="190dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="70dp">
 
                 <LinearLayout
@@ -38,32 +38,32 @@
 
                     <ImageView
                         android:id="@+id/music_img"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:background="@drawable/music" />
 
                     <ImageView
                         android:id="@+id/hacking_img"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:background="@drawable/hacking" />
 
                     <ImageView
                         android:id="@+id/hiking_img"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:background="@drawable/hiking" />
 
                     <ImageView
                         android:id="@+id/sports_img"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:background="@drawable/sports" />
 
                     <ImageView
                         android:id="@+id/photography_img"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:background="@drawable/photography" />
 
                     <ImageView

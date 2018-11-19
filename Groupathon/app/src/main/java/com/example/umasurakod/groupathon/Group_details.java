@@ -33,9 +33,11 @@ public class Group_details extends AppCompatActivity {
         // groupName.setTitle(getIntent().getStringExtra("grpName"));
 
         listItems = (ListView)findViewById(R.id.list_items);
-        final String[] mem_Item = {"Group member", "Item Checklist"};
-        ListAdapter myAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mem_Item);
-        listItems.setAdapter(myAdapter);
+//        final String[] mem_Item = {"Group member", "Item Checklist"};
+//        ListAdapter myAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mem_Item);
+//        listItems.setAdapter(myAdapter);
+
+
         listItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

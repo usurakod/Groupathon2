@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 
 import android.content.Intent;
 
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +38,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -54,22 +61,28 @@ public class MainActivity extends AppCompatActivity {
     private ListView events;
     private static final int SELECT_PHOTO = 100;
     private ImageView chooseImage;
-    String[] titles;
-    String[] descriptions;
-    int[] images = {R.drawable.download1, R.drawable.download2, R.drawable.download3, R.drawable.download4, R.drawable.download5, R.drawable.download7, R.drawable.download8};
-
+    String titles;
+    String descriptions;
+    //int[] images = {R.drawable.download1, R.drawable.download2, R.drawable.download3, R.drawable.download4, R.drawable.download5, R.drawable.download7, R.drawable.download8};
+    private DatabaseReference groupathonGrpDetails;
+    private ArrayList<String> latestGroupNames ;
+    private ArrayList<String> latestGroupDescriptions;
+    private ArrayList<Integer> images;
+    private String currentUID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setTitle("Groupathon");
         //setContentView(R.layout.navigation_header);
-        Resources res = getResources();
-        titles=res.getStringArray(R.array.titles);
-        descriptions = res.getStringArray(R.array.description);
-        events = findViewById(R.id.events);
-        SushAdapter adapter = new SushAdapter(this, titles, descriptions, images);
-        events.setAdapter(adapter);
+        //Resources res = getResources();
+        //titles=res.getStringArray(R.array.titles);
+        //descriptions = res.getStringArray(R.array.description);
+
+        latestGroupNames = new ArrayList<>();
+        latestGroupDescriptions = new ArrayList<>();
+        images = new ArrayList<>();
+//        events.setAdapter(adapter);
         navigationView = findViewById(R.id.nav_view);
         View navHeader=navigationView.getHeaderView(0);
 
@@ -99,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             }
-        });//Sush--not working(implement later)
+        });
         myDrawerLayout = findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, myDrawerLayout, R.string.open, R.string.close);
         myDrawerLayout.addDrawerListener(mToggle);
@@ -177,6 +190,67 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        currentUID = user.getUid();
+
+        groupathonGrpDetails = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
+        events = findViewById(R.id.events);
+        //ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(this,R.layout.singlerow_listall,latestGroups);
+        final SushAdapter adapter = new SushAdapter(this, latestGroupNames,latestGroupDescriptions,images);
+        events.setAdapter(adapter);
+
+
+
+        groupathonGrpDetails.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(dataSnapshot.child("Name").getValue(String.class)!=null || dataSnapshot.child("Details").getValue(String.class)!=null) {
+                    titles = dataSnapshot.child("Name").getValue(String.class);
+                    descriptions = dataSnapshot.child("Details").getValue(String.class);
+                    latestGroupNames.add(titles);
+                    latestGroupDescriptions.add(descriptions);
+                    images.add(R.drawable.download1);
+                    images.add(R.drawable.download2);
+
+                    adapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+//        groupathonGrpDetails.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                titles = dataSnapshot.child("Details").getValue(String.class);
+//                latestGroups.add(titles);
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
     }
 
@@ -255,17 +329,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    class SushAdapter extends ArrayAdapter<String> {
+    static class SushAdapter extends ArrayAdapter<String> {
         Context context;
-        int[] images;
-        String[] titleArray;
-        String[] descriptionArray;
+        ArrayList<Integer> images;
+        ArrayList<String> titlesArrayList;
+        ArrayList<String> descriptionArray;
 
-        SushAdapter(Context c, String[] titles, String[] descriptions, int[] imgs) {
-            super(c, R.layout.singlerow_listall, R.id.textView2, titles);
+        SushAdapter(Context c, ArrayList<String> groupTitles,ArrayList<String> groupDescriptions, ArrayList<Integer> imgs) {
+            super(c, R.layout.singlerow_listall, R.id.textView2,groupTitles);
             this.context = c;
-            this.titleArray = titles;
-            this.descriptionArray = descriptions;
+            this.titlesArrayList = groupTitles;
+            this.descriptionArray = groupDescriptions;
             this.images = imgs;
         }
     }

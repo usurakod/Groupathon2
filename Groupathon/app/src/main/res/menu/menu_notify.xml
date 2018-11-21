@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <!-- add the following item to your menu.xml -->
+
+
+    <item android:id="@+id/Notifications"
+        android:icon="@drawable/actionbar_notify_icon"
+        android:title="Notifications"
+        app:showAsAction="always" />
+
+
+
+</menu>

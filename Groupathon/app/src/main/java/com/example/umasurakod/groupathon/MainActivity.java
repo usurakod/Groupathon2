@@ -2,10 +2,14 @@ package com.example.umasurakod.groupathon;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -19,6 +23,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,6 +54,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout myDrawerLayout;
@@ -71,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> latestGroupDescriptions;
     private ArrayList<Integer> images;
     private String currentUID;
+    private  Menu defaultmenu; //Notifications
+    List<String> notify_list= new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -271,6 +280,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //@Prathibha
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_notify, menu);
+
+        //return true;
+        this.defaultmenu=menu;
+       //remove this after implementing firebase
+        setCount(this, "11");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        if(item.getItemId()==R.id.Notifications){
+            //Call Dialog Box
+            showDialogBoxMessage("Recent Notifications","Notification1");
+            //set count to  after clicked on notifications and clear the alertbox
+            setCount(this,"0");
+        }
+        if (mToggle.onOptionsItemSelected(item)) {
+            Log.d("MSG",item.toString());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void signOut() {
         auth.signOut();
 //        FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
@@ -293,13 +331,13 @@ public class MainActivity extends AppCompatActivity {
     }
     // to select item from action bar
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 
     // this listener will be called when there is change in firebase user session
@@ -383,6 +421,70 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //@Prathibha
+    public void setCount(Context context,String count) {
+        MenuItem menuItem = defaultmenu.findItem(R.id.Notifications);
+        LayerDrawable icon = (LayerDrawable) menuItem.getIcon();
+        CountDrawable badge;
+
+        // Reuse drawable if possible
+        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_group_count);
+        if (reuse != null && reuse instanceof CountDrawable) {
+            badge = (CountDrawable) reuse;
+        }
+        else {
+            badge = new CountDrawable(context);
+        }
+
+        badge.setCount(count);
+        icon.mutate();
+        icon.setDrawableByLayerId(R.id.ic_group_count, badge);
+    }
+
+
+ /*   public void showDialogBoxMessage(String title,String Message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(Message);
+        builder.show();
+    }*/
+
+    public void showDialogBoxMessage(String title,String msg)
+    {
+
+       /* AlertDialog.Builder AB=new AlertDialog.Builder(this);
+        AB.setCancelable(true);
+        AB.setTitle(title);
+        AB.setMessage(msg);
+        AB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //  Toast.makeText(MainActivity.this, "OK",Toast.LENGTH_SHORT).show();
+            }
+        }).show();*/
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.notify_list);
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        //alertDialog.
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.notify_list, null);
+        alertDialog.setView(convertView);
+        alertDialog.setTitle("New Notifications");
+
+        ListView lv = (ListView) convertView.findViewById(R.id.lv);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,notify_list);
+
+        lv.setAdapter(adapter);
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //do nothing
+            }
+        }).show();
+    }
 
 }
 

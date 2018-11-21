@@ -17,7 +17,7 @@ public class Group_details extends AppCompatActivity {
 
     TextView grpDetail;
     ListView listItems;
-    String grpDesc;
+    Toolbar groupName;
     String grpName;
     //String grpid;
 
@@ -29,9 +29,8 @@ public class Group_details extends AppCompatActivity {
         grpDetail = (TextView)findViewById(R.id.detail_text);
         grpDetail.setText(getIntent().getStringExtra("GrpDesc"));
         grpName=getIntent().getStringExtra("GrpName");
-        grpDesc=getIntent().getStringExtra("GrpDetails");
+       // grpid=getIntent().getStringExtra("Grpid");
         setTitle(grpName);
-        grpDetail.setText(grpDesc);
         //  groupName = (Toolbar)findViewById(R.id.toolbar);
         // groupName.setTitle(getIntent().getStringExtra("grpName"));
 

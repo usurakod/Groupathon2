@@ -78,7 +78,7 @@ public class join_group extends AppCompatActivity {
 
                         Intent intent = new Intent(getApplicationContext(), Group_details.class);
                         intent.putExtra("GrpName", grpName);
-                        intent.putExtra("GrpDetails", grpDesc);
+                        intent.putExtra("GrpDesc", grpDesc);
                        // intent.putExtra("Grpid", groupid);
                         startActivity(intent);
                     }

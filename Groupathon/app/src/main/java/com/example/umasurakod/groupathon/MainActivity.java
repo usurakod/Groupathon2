@@ -3,6 +3,7 @@ package com.example.umasurakod.groupathon;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -192,11 +194,24 @@ public class MainActivity extends AppCompatActivity {
 
         currentUID = user.getUid();
 
-        groupathonGrpDetails = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
+        //groupathonGrpDetails = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
+        groupathonGrpDetails = FirebaseDatabase.getInstance().getReference().child("Groups");
         events = findViewById(R.id.events);
+
         //ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(this,R.layout.singlerow_listall,latestGroups);
         final SushAdapter adapter = new SushAdapter(this, latestGroupNames,latestGroupDescriptions,images);
         events.setAdapter(adapter);
+        events.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+
+                Intent intent = new Intent(getApplicationContext(), join_group.class);
+                intent.putExtra("GrpName", latestGroupNames.get(position));
+                intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));
+                startActivity(intent);
+            }
+        });
 
 
 
@@ -213,9 +228,9 @@ public class MainActivity extends AppCompatActivity {
 
                     adapter.notifyDataSetChanged();
                 }
-
-
             }
+
+
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -251,6 +266,8 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
+
 
     }
 
@@ -364,6 +381,9 @@ public class MainActivity extends AppCompatActivity {
     public void ChooseImage(View v){
         openGallery();
     }
+
+
+
 }
 
 

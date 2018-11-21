@@ -24,6 +24,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
     EditText grpName;
     EditText locationName;
     private DatabaseReference createGroup;
+    private DatabaseReference Groups;
     private String currentUID;
 
 
@@ -44,6 +45,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         currentUID = user.getUid();
         createGroup = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
+        Groups=FirebaseDatabase.getInstance().getReference().child("Groups");
 
 
 
@@ -75,7 +77,20 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                             Toast.makeText(create_group.this, "Group Created Successfully", Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            Toast.makeText(create_group.this,"Could not create Group, please conatc the customercare",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(create_group.this,"Could not create Group, please contact the customer care",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                Groups.push().setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+
+                        if(task.isSuccessful()){
+                            Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(create_group.this,"Could not add Group, please contact the customer care",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -89,11 +104,11 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
 
     }
     public void goTocreatedPg(){
-//        String getDetails = details.getText().toString();
-//        String getName=grpName.getText().toString();
+            String  GrpName  = details.getText().toString();
+             String GrpDesc=grpName.getText().toString();
         Intent intent = new Intent(this,Group_details.class);
-//        intent.putExtra("GrpDetails",getDetails);
-//        intent.putExtra("GrpName",getName);
+       intent.putExtra("GrpDetails",GrpName);
+          intent.putExtra("GrpName",GrpDesc);
         startActivity(intent);
     }
 

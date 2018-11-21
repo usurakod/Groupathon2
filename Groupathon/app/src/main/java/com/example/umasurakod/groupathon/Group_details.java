@@ -26,16 +26,16 @@ public class Group_details extends AppCompatActivity {
         setContentView(R.layout.group_details);
 
         grpDetail = (TextView)findViewById(R.id.detail_text);
-        grpDetail.setText(getIntent().getStringExtra("GrpDetails"));
+        grpDetail.setText(getIntent().getStringExtra("GrpDesc"));
         grpName=getIntent().getStringExtra("GrpName");
         setTitle(grpName);
         //  groupName = (Toolbar)findViewById(R.id.toolbar);
         // groupName.setTitle(getIntent().getStringExtra("grpName"));
 
         listItems = (ListView)findViewById(R.id.list_items);
-//        final String[] mem_Item = {"Group member", "Item Checklist"};
-//        ListAdapter myAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mem_Item);
-//        listItems.setAdapter(myAdapter);
+        final String[] mem_Item = {"Group member", "Item Checklist"};
+         ListAdapter myAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mem_Item);
+         listItems.setAdapter(myAdapter);
 
 
         listItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {

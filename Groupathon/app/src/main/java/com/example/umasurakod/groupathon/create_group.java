@@ -104,11 +104,11 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
 
     }
     public void goTocreatedPg(){
-            String  GrpName  = details.getText().toString();
-             String GrpDesc=grpName.getText().toString();
+        String  GrpName  = details.getText().toString();
+        String GrpDesc=grpName.getText().toString();
         Intent intent = new Intent(this,Group_details.class);
-       intent.putExtra("GrpDetails",GrpName);
-          intent.putExtra("GrpName",GrpDesc);
+        intent.putExtra("GrpName",GrpName);
+        intent.putExtra("GrpDetails",GrpDesc);
         startActivity(intent);
     }
 

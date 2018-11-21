@@ -196,6 +196,10 @@ public class MainActivity extends AppCompatActivity {
 
         //groupathonGrpDetails = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
         groupathonGrpDetails = FirebaseDatabase.getInstance().getReference().child("Groups");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Groupmembers");
+        String id = ref.push().getKey();
+        DatabaseReference getEmail= FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(id).child("Users");
+
         events = findViewById(R.id.events);
 
         //ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(this,R.layout.singlerow_listall,latestGroups);
@@ -204,8 +208,6 @@ public class MainActivity extends AppCompatActivity {
         events.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-
                 Intent intent = new Intent(getApplicationContext(), join_group.class);
                 intent.putExtra("GrpName", latestGroupNames.get(position));
                 intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));

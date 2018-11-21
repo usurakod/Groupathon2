@@ -32,16 +32,18 @@ public class Group_members extends AppCompatActivity {
     DatabaseReference groupmembers;
 
     String names;
+    String grpname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_general);
         final ArrayList<String> latestGroupmemNames ;
         final ArrayList<Integer> images ;
-        final String groupid=FirebaseAuth.getInstance().getUid();
+        grpname=getIntent().getStringExtra("GrpName");
         latestGroupmemNames=new ArrayList<String>();
         images=new ArrayList<Integer>();
-        groupmembers = FirebaseDatabase.getInstance().getReference().child("Groupmembers");
+
+        groupmembers = FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(grpname);
 
         final Adapter adapter = new Adapter(this, latestGroupmemNames, images);
         list = findViewById(R.id.list_view);

@@ -19,6 +19,7 @@ public class Group_details extends AppCompatActivity {
     ListView listItems;
     Toolbar groupName;
     String grpName;
+    //String grpid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +29,13 @@ public class Group_details extends AppCompatActivity {
         grpDetail = (TextView)findViewById(R.id.detail_text);
         grpDetail.setText(getIntent().getStringExtra("GrpDesc"));
         grpName=getIntent().getStringExtra("GrpName");
+       // grpid=getIntent().getStringExtra("Grpid");
         setTitle(grpName);
         //  groupName = (Toolbar)findViewById(R.id.toolbar);
         // groupName.setTitle(getIntent().getStringExtra("grpName"));
 
         listItems = (ListView)findViewById(R.id.list_items);
-        final String[] mem_Item = {"Group member", "Item Checklist"};
+        final String[] mem_Item = {"Group members", "Item Checklist"};
          ListAdapter myAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mem_Item);
          listItems.setAdapter(myAdapter);
 
@@ -45,6 +47,7 @@ public class Group_details extends AppCompatActivity {
                     if(position==0) {
                         Intent intent = new Intent(Group_details.this, Group_members.class);
                         intent.putExtra("GrpName", grpName);
+                        //intent.putExtra("Grpid",grpid);
                         startActivity(intent);
                     }
                     else

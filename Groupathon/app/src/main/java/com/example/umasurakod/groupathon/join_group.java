@@ -31,6 +31,7 @@ public class join_group extends AppCompatActivity {
     Button join;
     private DatabaseReference joinGroup;
     private String email;
+    String groupid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +51,18 @@ public class join_group extends AppCompatActivity {
 
         final String[] mem_Item = {"Group member"};
 
-        joinGroup=FirebaseDatabase.getInstance().getReference().child("Groupmembers");
-                join.setOnClickListener(new View.OnClickListener() {
+        joinGroup=FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(grpName);
+
+        join.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getApplicationContext(), Group_details.class);
-                        intent.putExtra("GrpName", grpName);
-                        intent.putExtra("GrpDesc", grpDesc);
-                        startActivity(intent);
+
 
                         HashMap<String,String> grpMap = new HashMap<>();
                         grpMap.put("User",email);
+                        groupid=joinGroup.push().getKey();
 
-                        joinGroup.push().setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        joinGroup.child(groupid).setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
 
@@ -75,6 +75,12 @@ public class join_group extends AppCompatActivity {
                                 }
                             }
                         });
+
+                        Intent intent = new Intent(getApplicationContext(), Group_details.class);
+                        intent.putExtra("GrpName", grpName);
+                        intent.putExtra("GrpDesc", grpDesc);
+                       // intent.putExtra("Grpid", groupid);
+                        startActivity(intent);
                     }
                 });
 

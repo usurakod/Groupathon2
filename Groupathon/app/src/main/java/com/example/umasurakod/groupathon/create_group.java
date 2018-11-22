@@ -84,6 +84,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
 
                 HashMap<String,String> categorymap = new HashMap<>();
                 categorymap.put("Name",grp_Name);
+                categorymap.put("Details",grp_Details);
 
                 HashMap<String,String> userMap = new HashMap<>();
                 userMap.put("Name",grp_Name);

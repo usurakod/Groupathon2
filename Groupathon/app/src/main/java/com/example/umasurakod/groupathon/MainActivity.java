@@ -229,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         events.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
                 Intent intent = new Intent(getApplicationContext(), join_group.class);
                 intent.putExtra("GrpName", latestGroupNames.get(position));
                 intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));

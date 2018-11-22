@@ -1,6 +1,7 @@
 package com.example.umasurakod.groupathon;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.umasurakod.groupathon.AccountActivity.SettingActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +28,7 @@ public class Category_groups extends AppCompatActivity {
     DatabaseReference myCategory;
     ListView list;
     String name;
+    String description;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +36,11 @@ public class Category_groups extends AppCompatActivity {
 
 
         final ArrayList<String> latestGroupcategoryNames;
+        final ArrayList<String> latestGroupcategoryDescriptions;
         final ArrayList<Integer> images;
 
         latestGroupcategoryNames = new ArrayList<String>();
+        latestGroupcategoryDescriptions=new ArrayList<String>();
         images = new ArrayList<Integer>();
         String category=getIntent().getStringExtra("category");
         setTitle(category);
@@ -50,6 +55,11 @@ public class Category_groups extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
+                Intent intent = new Intent(getApplicationContext(), Group_details.class);
+                intent.putExtra("GrpName",latestGroupcategoryNames.get(position));
+                intent.putExtra("GrpDetails",latestGroupcategoryDescriptions.get(position));
+                startActivity(intent);
+
             }
         });
 
@@ -59,7 +69,9 @@ public class Category_groups extends AppCompatActivity {
                 /*if(dataSnapshot.child("User").getValue(String.class)!=null ) {*/
 
                 name = dataSnapshot.child("Name").getValue(String.class);
+                description = dataSnapshot.child("Details").getValue(String.class);
                 latestGroupcategoryNames.add(name);
+                latestGroupcategoryDescriptions.add(description);
                 images.add(R.drawable.download1);
                 adapter.notifyDataSetChanged();
                 /*}*/

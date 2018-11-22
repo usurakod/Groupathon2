@@ -142,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
         music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Category_groups.class);
+                intent.putExtra("category","music");
+                startActivity(intent);
 
             }
         });
@@ -150,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
         hacking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Category_groups.class);
+                intent.putExtra("category","hacking");
+                startActivity(intent);
 
             }
         });
@@ -158,7 +164,9 @@ public class MainActivity extends AppCompatActivity {
         hiking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplicationContext(), Category_groups.class);
+                intent.putExtra("category","hiking");
+                startActivity(intent);
             }
         });
 
@@ -166,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
         sports.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplicationContext(), Category_groups.class);
+                intent.putExtra("category","sports");
+                startActivity(intent);
             }
         });
 
@@ -174,7 +184,9 @@ public class MainActivity extends AppCompatActivity {
         photography.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplicationContext(), Category_groups.class);
+                intent.putExtra("category","photography");
+                startActivity(intent);
             }
         });
 

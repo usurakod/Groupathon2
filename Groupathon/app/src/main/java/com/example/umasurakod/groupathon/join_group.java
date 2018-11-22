@@ -30,8 +30,10 @@ public class join_group extends AppCompatActivity {
     String grpName;
     Button join;
     private DatabaseReference joinGroup;
+    private DatabaseReference Usergroups;
     private String email;
-    String groupid;
+    String groupid,userid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,9 @@ public class join_group extends AppCompatActivity {
         listItems = (ListView)findViewById(R.id.list_items);
 
         final String[] mem_Item = {"Group member"};
-
+        String currentUID=user.getUid();
         joinGroup=FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(grpName);
+        Usergroups=FirebaseDatabase.getInstance().getReference().child("Usergroups").child(currentUID);
 
         join.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -61,6 +64,22 @@ public class join_group extends AppCompatActivity {
                         HashMap<String,String> grpMap = new HashMap<>();
                         grpMap.put("User",email);
                         groupid=joinGroup.push().getKey();
+                        HashMap<String,String> userMap = new HashMap<>();
+                        userid=Usergroups.push().getKey();
+                        userMap.put("Name",grpName);
+                        grpMap.put("Details",grpDesc);
+
+                        Usergroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(join_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(join_group.this,"Could not add Group, please contact the customer care",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
 
                         joinGroup.child(groupid).setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -83,6 +102,9 @@ public class join_group extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+
+
 
 
 

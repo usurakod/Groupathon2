@@ -28,7 +28,8 @@
         <activity android:name=".Group_members" />
         <activity android:name=".Group_itemchecklist" />
         <activity android:name=".my_grouplist" />
-        <activity android:name=".join_group"></activity>
+        <activity android:name=".join_group" />
+        <activity android:name=".Category_groups"></activity>
     </application>
 
 </manifest>

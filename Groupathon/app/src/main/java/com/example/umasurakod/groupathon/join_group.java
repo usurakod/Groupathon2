@@ -67,7 +67,7 @@ public class join_group extends AppCompatActivity {
                         HashMap<String,String> userMap = new HashMap<>();
                         userid=Usergroups.push().getKey();
                         userMap.put("Name",grpName);
-                        grpMap.put("Details",grpDesc);
+                        userMap.put("Details",grpDesc);
 
                         Usergroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -97,20 +97,10 @@ public class join_group extends AppCompatActivity {
 
                         Intent intent = new Intent(getApplicationContext(), Group_details.class);
                         intent.putExtra("GrpName", grpName);
-                        intent.putExtra("GrpDesc", grpDesc);
+                        intent.putExtra("GrpDetails", grpDesc);
                        // intent.putExtra("Grpid", groupid);
                         startActivity(intent);
                     }
                 });
-
-
-
-
-
-
-
-
-
-
-    }
+        }
 }

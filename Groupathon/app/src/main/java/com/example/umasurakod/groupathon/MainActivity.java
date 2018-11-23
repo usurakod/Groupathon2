@@ -113,7 +113,12 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), my_grouplist.class);
                     startActivity(intent);
 
-                } else if (id == R.id.Notifications) {
+                }
+                else if (id == R.id.joinedgroups) {
+                    Intent intent = new Intent(getApplicationContext(), myJoinedGroups.class);
+                    startActivity(intent);
+
+                }else if (id == R.id.Notifications) {
 
 
                 } else if (id == R.id.Settings) {

@@ -30,7 +30,7 @@ public class join_group extends AppCompatActivity {
     String grpName;
     Button join;
     private DatabaseReference joinGroup;
-    private DatabaseReference Usergroups;
+    private DatabaseReference myJoinGroups;
     private String email;
     String groupid,userid;
 
@@ -54,7 +54,7 @@ public class join_group extends AppCompatActivity {
         final String[] mem_Item = {"Group member"};
         String currentUID=user.getUid();
         joinGroup=FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(grpName);
-        Usergroups=FirebaseDatabase.getInstance().getReference().child("Usergroups").child(currentUID);
+        myJoinGroups=FirebaseDatabase.getInstance().getReference().child("myJoinGroups").child(currentUID);
 
         join.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -65,11 +65,11 @@ public class join_group extends AppCompatActivity {
                         grpMap.put("User",email);
                         groupid=joinGroup.push().getKey();
                         HashMap<String,String> userMap = new HashMap<>();
-                        userid=Usergroups.push().getKey();
+                        userid=myJoinGroups.push().getKey();
                         userMap.put("Name",grpName);
                         userMap.put("Details",grpDesc);
 
-                        Usergroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        myJoinGroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){

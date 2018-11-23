@@ -4,6 +4,10 @@
         android:icon="@mipmap/networking"
         android:title="My Groups"/>
 
+    <item android:id="@+id/joinedgroups"
+        android:icon="@mipmap/networking"
+        android:title="Joined Groups"/>
+
     <item android:id="@+id/Notifications"
         android:icon="@mipmap/bell"
         android:title="Notifications"/>

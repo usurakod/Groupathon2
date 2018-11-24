@@ -72,10 +72,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageView chooseImage;
     String titles;
     String descriptions;
+    String dates,loc;
     //int[] images = {R.drawable.download1, R.drawable.download2, R.drawable.download3, R.drawable.download4, R.drawable.download5, R.drawable.download7, R.drawable.download8};
     private DatabaseReference groupathonGrpDetails;
     private ArrayList<String> latestGroupNames ;
     private ArrayList<String> latestGroupDescriptions;
+    private ArrayList<String> latestGroupDates ;
+    private ArrayList<String> latestGrouplocations;
     private ArrayList<Integer> images;
     private String currentUID;
     private  Menu defaultmenu; //Notifications
@@ -91,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         //descriptions = res.getStringArray(R.array.description);
 
         latestGroupNames = new ArrayList<>();
+        latestGroupDates=new ArrayList<>();
+        latestGrouplocations=new ArrayList<>();
         latestGroupDescriptions = new ArrayList<>();
         images = new ArrayList<>();
 //        events.setAdapter(adapter);
@@ -238,6 +243,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), join_group.class);
                 intent.putExtra("GrpName", latestGroupNames.get(position));
                 intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));
+                intent.putExtra("Eventdate", latestGroupDates.get(position));
+                intent.putExtra("Eventlocation", latestGrouplocations.get(position));
                 startActivity(intent);
             }
         });
@@ -250,8 +257,12 @@ public class MainActivity extends AppCompatActivity {
                 if(dataSnapshot.child("Name").getValue(String.class)!=null || dataSnapshot.child("Details").getValue(String.class)!=null) {
                     titles = dataSnapshot.child("Name").getValue(String.class);
                     descriptions = dataSnapshot.child("Details").getValue(String.class);
+                    dates=dataSnapshot.child("Event Date").getValue(String.class);
+                    loc=dataSnapshot.child("Location").getValue(String.class);
                     latestGroupNames.add(titles);
                     latestGroupDescriptions.add(descriptions);
+                    latestGroupDates.add(dates);
+                    latestGrouplocations.add(loc);
                     images.add(R.drawable.download1);
                     images.add(R.drawable.download2);
 

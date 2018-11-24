@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 public class join_group extends AppCompatActivity {
 
-    TextView grpDetail;
+    TextView grpDetail,Eventdate,Eventlocation;
     String grpDesc;
     ListView listItems;
     String grpName;
@@ -33,16 +33,24 @@ public class join_group extends AppCompatActivity {
     private DatabaseReference myJoinGroups;
     private String email;
     String groupid,userid;
+    String eventdate;
+    String eventloc;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join_group);
+        Eventdate = (TextView)findViewById(R.id.Date);
+        Eventlocation = (TextView)findViewById(R.id.Location);
         grpDetail = (TextView)findViewById(R.id.detail_text);
         join=(Button)findViewById(R.id.join_button);
         grpName=getIntent().getStringExtra("GrpName");
         grpDesc=getIntent().getStringExtra("GrpDesc");
+        eventdate=getIntent().getStringExtra("Eventdate");
+        eventloc=getIntent().getStringExtra("Eventlocation");
+        Eventdate.setText(eventdate);
+        Eventlocation.setText(eventloc);
 
         setTitle(grpName);
         grpDetail.setText(grpDesc);
@@ -63,6 +71,8 @@ public class join_group extends AppCompatActivity {
 
                         HashMap<String,String> grpMap = new HashMap<>();
                         grpMap.put("User",email);
+                        grpMap.put("Details",grpDesc);
+
                         groupid=joinGroup.push().getKey();
                         HashMap<String,String> userMap = new HashMap<>();
                         userid=myJoinGroups.push().getKey();
@@ -98,6 +108,8 @@ public class join_group extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), Group_details.class);
                         intent.putExtra("GrpName", grpName);
                         intent.putExtra("GrpDetails", grpDesc);
+                        intent.putExtra("Eventdate",eventdate);
+                        intent.putExtra("Eventlocation",eventloc);
                        // intent.putExtra("Grpid", groupid);
                         startActivity(intent);
                     }

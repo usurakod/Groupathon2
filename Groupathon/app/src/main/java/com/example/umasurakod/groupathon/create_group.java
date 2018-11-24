@@ -34,6 +34,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
     private DatabaseReference Groups;
     private DatabaseReference categories;
     private DatabaseReference Usergroups;
+    private DatabaseReference joinGroup;
     private String currentUID;
     private DatePickerDialog.OnDateSetListener Datelistener;
 
@@ -42,6 +43,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
     String userid;
     String emailid;
     String event_date;
+    String email;
 
 
 
@@ -69,6 +71,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
         currentUID = user.getUid();
         emailid=user.getEmail();
         createGroup = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
+
         Groups=FirebaseDatabase.getInstance().getReference().child("Groups");
 
 
@@ -120,6 +123,8 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     event_date = eventdate.getText().toString();
                     categories = FirebaseDatabase.getInstance().getReference().child("Categories").child(category_Name);
                     Usergroups = FirebaseDatabase.getInstance().getReference().child("Usergroups").child(currentUID);
+                    joinGroup=FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(grp_Name);
+                    email = user.getEmail();
 
                     HashMap<String, String> grpMap = new HashMap<>();
                     grpMap.put("Name", grp_Name);
@@ -141,6 +146,14 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     userMap.put("Location", location_Name);
                     userMap.put("Details", grp_Details);
                     userMap.put("Event Date", event_date);
+
+
+                    HashMap<String,String> joinMap = new HashMap<>();
+                    joinMap.put("User",email);
+                    joinMap.put("Details",grp_Details);
+
+                    groupid=joinGroup.push().getKey();
+
 
 
                     Usergroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -184,6 +197,20 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                                 Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+
+
+                    joinGroup.child(userid).setValue(joinMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(create_group.this, "Joined Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(create_group.this,"Could not join, please contact the customer care",Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

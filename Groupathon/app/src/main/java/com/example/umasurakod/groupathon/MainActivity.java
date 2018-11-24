@@ -55,6 +55,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout myDrawerLayout;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     String dates,loc;
     //int[] images = {R.drawable.download1, R.drawable.download2, R.drawable.download3, R.drawable.download4, R.drawable.download5, R.drawable.download7, R.drawable.download8};
     private DatabaseReference groupathonGrpDetails;
+    private DatabaseReference memberDetails;
     private ArrayList<String> latestGroupNames ;
     private ArrayList<String> latestGroupDescriptions;
     private ArrayList<String> latestGroupDates ;
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> images;
     private String currentUID;
     private  Menu defaultmenu; //Notifications
+    private FirebaseUser user;
     List<String> notify_list= new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //get current user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
         music = (findViewById(R.id.music_img));
@@ -238,14 +241,51 @@ public class MainActivity extends AppCompatActivity {
         events.setAdapter(adapter);
         events.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                String grpName =(String) adapterView.getItemAtPosition(position);
+                memberDetails = FirebaseDatabase.getInstance().getReferenceFromUrl("https://groupathon.firebaseio.com/Groupmembers/"+grpName);
+                memberDetails.addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                //Get map of users in datasnapshot
 
-                Intent intent = new Intent(getApplicationContext(), join_group.class);
-                intent.putExtra("GrpName", latestGroupNames.get(position));
-                intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));
-                intent.putExtra("Eventdate", latestGroupDates.get(position));
-                intent.putExtra("Eventlocation", latestGrouplocations.get(position));
-                startActivity(intent);
+                                boolean exists=collectEmailIds((Map<String,Object>) dataSnapshot.getValue());
+                                if(!exists) {
+                                    Intent intent = new Intent(getApplicationContext(), join_group.class);
+                                    intent.putExtra("GrpName", latestGroupNames.get(position));
+                                    intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));
+                                    intent.putExtra("Eventdate", latestGroupDates.get(position));
+                                    intent.putExtra("Eventlocation", latestGrouplocations.get(position));
+                                    startActivity(intent);
+                                }
+
+                                else{
+                                    Intent intent = new Intent(getApplicationContext(), Group_details.class);
+                                    intent.putExtra("GrpName", latestGroupNames.get(position));
+                                    intent.putExtra("GrpDetails", latestGroupDescriptions.get(position));
+                                    intent.putExtra("Eventdate", latestGroupDates.get(position));
+                                    intent.putExtra("Eventlocation", latestGrouplocations.get(position));
+                                    // intent.putExtra("Grpid", groupid);
+                                    startActivity(intent);
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                //handle databaseError
+                            }
+                        });
+
+
+
+//                Intent intent = new Intent(getApplicationContext(), join_group.class);
+//                intent.putExtra("GrpName", latestGroupNames.get(position));
+//                intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));
+//                intent.putExtra("Eventdate", latestGroupDates.get(position));
+//                intent.putExtra("Eventlocation", latestGrouplocations.get(position));
+//                startActivity(intent);
             }
         });
 
@@ -516,6 +556,29 @@ public class MainActivity extends AppCompatActivity {
             }
         }).show();
     }
+
+    private boolean collectEmailIds(Map<String,Object> users) {
+        Intent intent = getIntent();
+        String email = user.getEmail();
+        ArrayList<String> emailIds = new ArrayList<>();
+
+
+        for (Map.Entry<String, Object> entry : users.entrySet()){
+
+
+            Map singleUser = (Map) entry.getValue();
+
+            //String useri=(String)singleUser.get(0);
+            String userii = (String)singleUser.get("User");
+            emailIds.add( userii);
+        }
+
+        if(emailIds.contains(email)){
+            return true;
+        }
+
+        return false;
+        }
 
 }
 

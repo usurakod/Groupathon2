@@ -1,6 +1,11 @@
 package com.example.umasurakod.groupathon;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class create_group extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -23,15 +29,20 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
     EditText details;
     EditText grpName;
     EditText locationName;
+    TextView eventdate;
     private DatabaseReference createGroup;
     private DatabaseReference Groups;
     private DatabaseReference categories;
     private DatabaseReference Usergroups;
     private String currentUID;
-    String grp_Name;
+    private DatePickerDialog.OnDateSetListener Datelistener;
+
+    String grp_Name,location_Name, category_Name  ;
     String groupid;
     String userid;
     String emailid;
+    String event_date;
+
 
 
     @Override
@@ -50,6 +61,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
         locationName = findViewById(R.id.location_text);
         details = findViewById(R.id.detail_text);
         grpName=findViewById(R.id.name_text);
+        eventdate=(TextView) findViewById(R.id.datetext);
         create = (Button)findViewById(R.id.create_button);
 
 
@@ -60,88 +72,126 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
         Groups=FirebaseDatabase.getInstance().getReference().child("Groups");
 
 
+        eventdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calender = Calendar.getInstance();
+                int year = calender.get(Calendar.YEAR);
+                int month = calender.get(Calendar.MONTH);
+                int day = calender.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dialog = new DatePickerDialog(create_group.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Datelistener, year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
 
+            }
+        });
+
+        Datelistener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                String date=day+"/"+month+"/"+year;
+                eventdate.setText(date);
+            }
+        };
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //String grp_Name = grpName.getText().toString();
-                String grp_Details = details.getText().toString();
-                grp_Name = grpName.getText().toString();
-                String location_Name = locationName.getText().toString();
-                String category_Name = spinner.getSelectedItem().toString();
-                categories=FirebaseDatabase.getInstance().getReference().child("Categories").child(category_Name);
-                Usergroups=FirebaseDatabase.getInstance().getReference().child("Usergroups").child(currentUID);
+                if (grpName.getText().toString().isEmpty() || eventdate.getText().toString().isEmpty() || locationName.getText().toString().isEmpty()) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(create_group.this).create();
+                    alertDialog.setTitle("Alert");
+                    alertDialog.setMessage("Please fill all mandatory fields to preceed with group creation");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
 
-                HashMap<String,String> grpMap = new HashMap<>();
-                grpMap.put("Name",grp_Name);
-                grpMap.put("Details",grp_Details);
-                grpMap.put("Location",location_Name);
-                grpMap.put("Category",category_Name);
-                groupid=categories.push().getKey();
-                userid=Usergroups.push().getKey();
+                } else {
 
-                HashMap<String,String> categorymap = new HashMap<>();
-                categorymap.put("Name",grp_Name);
-                categorymap.put("Details",grp_Details);
+                    //String grp_Name = grpName.getText().toString();
+                    String grp_Details = details.getText().toString();
+                    grp_Name = grpName.getText().toString();
+                    location_Name = locationName.getText().toString();
+                    category_Name = spinner.getSelectedItem().toString();
+                    event_date = eventdate.getText().toString();
+                    categories = FirebaseDatabase.getInstance().getReference().child("Categories").child(category_Name);
+                    Usergroups = FirebaseDatabase.getInstance().getReference().child("Usergroups").child(currentUID);
 
-                HashMap<String,String> userMap = new HashMap<>();
-                userMap.put("Name",grp_Name);
-                userMap.put("Details",grp_Details);
+                    HashMap<String, String> grpMap = new HashMap<>();
+                    grpMap.put("Name", grp_Name);
+                    grpMap.put("Details", grp_Details);
+                    grpMap.put("Location", location_Name);
+                    grpMap.put("Event Date", event_date);
+                    grpMap.put("Category", category_Name);
+                    groupid = categories.push().getKey();
+                    userid = Usergroups.push().getKey();
+
+                    HashMap<String, String> categorymap = new HashMap<>();
+                    categorymap.put("Name", grp_Name);
+                    categorymap.put("Location", location_Name);
+                    categorymap.put("Details", grp_Details);
+                    categorymap.put("Event Date", event_date);
+
+                    HashMap<String, String> userMap = new HashMap<>();
+                    userMap.put("Name", grp_Name);
+                    userMap.put("Location", location_Name);
+                    userMap.put("Details", grp_Details);
+                    userMap.put("Event Date", event_date);
 
 
-                Usergroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+                    Usergroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else{
-                            Toast.makeText(create_group.this,"Could not add Group, please contact the customer care",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                    });
 
-                createGroup.push().setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                    createGroup.push().setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
 
 
-                        if(task.isSuccessful()){
-                            Toast.makeText(create_group.this, "Group Created Successfully", Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful()) {
+                                Toast.makeText(create_group.this, "Group Created Successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(create_group.this, "Could not create Group, please contact the customer care", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else{
-                            Toast.makeText(create_group.this,"Could not create Group, please contact the customer care",Toast.LENGTH_SHORT).show();
+                    });
+                    Groups.push().setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-                Groups.push().setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(create_group.this,"Could not add Group, please contact the customer care",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                    });
 
-                categories.child(groupid).setValue(categorymap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+                    categories.child(groupid).setValue(categorymap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else{
-                            Toast.makeText(create_group.this,"Could not add Group, please contact the customer care",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                goTocreatedPg();
+                    });
+                    goTocreatedPg();
+                }
             }
         });
+
 
 
 
@@ -151,9 +201,12 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
     public void goTocreatedPg(){
         String  GrpDesc  = details.getText().toString();
         String GrpName=grpName.getText().toString();
+        String Grploc=locationName.getText().toString();
         Intent intent = new Intent(this,Group_details.class);
         intent.putExtra("GrpDetails",GrpDesc);
         intent.putExtra("GrpName",GrpName);
+        intent.putExtra("Eventdate",event_date);
+        intent.putExtra("Eventlocation",Grploc);
         startActivity(intent);
     }
 

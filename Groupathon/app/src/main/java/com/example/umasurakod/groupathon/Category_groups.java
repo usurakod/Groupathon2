@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class Category_groups extends AppCompatActivity {
     DatabaseReference myCategory;
     ListView list;
-    String name;
+    String name,date,location;
     String description;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +37,14 @@ public class Category_groups extends AppCompatActivity {
 
         final ArrayList<String> latestGroupcategoryNames;
         final ArrayList<String> latestGroupcategoryDescriptions;
+        final ArrayList<String> latestGrouplocations;
+        final ArrayList<String> latestGroupEventdates;
         final ArrayList<Integer> images;
 
         latestGroupcategoryNames = new ArrayList<String>();
         latestGroupcategoryDescriptions=new ArrayList<String>();
+        latestGroupEventdates=new ArrayList<String>();
+        latestGrouplocations=new ArrayList<String>();
         images = new ArrayList<Integer>();
         String category=getIntent().getStringExtra("category");
         setTitle(category);
@@ -58,6 +62,8 @@ public class Category_groups extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Group_details.class);
                 intent.putExtra("GrpName",latestGroupcategoryNames.get(position));
                 intent.putExtra("GrpDetails",latestGroupcategoryDescriptions.get(position));
+                intent.putExtra("Eventdate",latestGroupEventdates.get(position));
+                intent.putExtra("Eventlocation",latestGrouplocations.get(position));
                 startActivity(intent);
 
             }
@@ -70,8 +76,12 @@ public class Category_groups extends AppCompatActivity {
 
                 name = dataSnapshot.child("Name").getValue(String.class);
                 description = dataSnapshot.child("Details").getValue(String.class);
+                date = dataSnapshot.child("Event Date").getValue(String.class);
+                location = dataSnapshot.child("Location").getValue(String.class);
                 latestGroupcategoryNames.add(name);
                 latestGroupcategoryDescriptions.add(description);
+                latestGroupEventdates.add(date);
+                latestGrouplocations.add(location);
                 images.add(R.drawable.download1);
                 adapter.notifyDataSetChanged();
                 /*}*/

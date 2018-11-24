@@ -2,11 +2,14 @@ package com.example.umasurakod.groupathon;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -22,14 +25,13 @@ import java.util.ArrayList;
 
 public class my_grouplist extends AppCompatActivity {
     ListView myList;
-    String[] titles;
-    String[] descriptions;
     DatabaseReference usergroupref;
-    String grpname;
-    String grpdesc;
+    String grpname,grpdesc,grpeventdate,grpeventloc;
     ArrayList<String> Groups;
     ArrayList<String>  Desc;
     ArrayList<Integer> images;
+    ArrayList<String> Dates;
+    ArrayList<String> locs;
 
 
     @Override
@@ -43,11 +45,25 @@ public class my_grouplist extends AppCompatActivity {
         Groups=new ArrayList<String>();
         Desc=new ArrayList<String>();
         images=new ArrayList<Integer>();
-        Resources res = getResources();
-        titles=res.getStringArray(R.array.titles);
-        descriptions = res.getStringArray(R.array.description);
+        Dates=new ArrayList<String>();
+        locs=new ArrayList<String>();
         final Adapter adapter = new Adapter(this, Groups, Desc, images);
         myList.setAdapter(adapter);
+
+
+        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                Intent intent = new Intent(getApplicationContext(), Group_details.class);
+                intent.putExtra("GrpName",Groups.get(position));
+                intent.putExtra("GrpDetails",Desc.get(position));
+                intent.putExtra("Eventdate",Dates.get(position));
+                intent.putExtra("Eventlocation",locs.get(position));
+                startActivity(intent);
+
+            }
+        });
 
         usergroupref = FirebaseDatabase.getInstance().getReference().child("Usergroups").child(userid);
 
@@ -57,10 +73,13 @@ public class my_grouplist extends AppCompatActivity {
                 //if(dataSnapshot.child("Name").getValue(String.class)!=null || dataSnapshot.child("Details").getValue(String.class)!=null) {
                     grpname = dataSnapshot.child("Name").getValue(String.class);
                     grpdesc = dataSnapshot.child("Details").getValue(String.class);
+                    grpeventdate=dataSnapshot.child("Event Date").getValue(String.class);
+                    grpeventloc=dataSnapshot.child("Location").getValue(String.class);
                     Groups.add(grpname);
                     Desc.add(grpdesc);
+                    Dates.add(grpeventdate);
+                    locs.add(grpeventloc);
                     images.add(R.drawable.download1);
-
                     adapter.notifyDataSetChanged();
                // }
             }

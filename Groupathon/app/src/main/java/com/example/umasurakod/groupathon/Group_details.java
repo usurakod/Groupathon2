@@ -15,9 +15,10 @@ import android.content.Intent;
 
 public class Group_details extends AppCompatActivity {
 
-    TextView grpDetail;
+    TextView grpDetail,Eventdate,Eventlocation;
     ListView listItems;
     String grpName;
+    String eventdate,eventloc;
     //String grpid;
 
     @Override
@@ -25,9 +26,17 @@ public class Group_details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.group_details);
 
+        Eventdate = (TextView)findViewById(R.id.Date);
+        Eventlocation = (TextView)findViewById(R.id.Location);
         grpDetail = (TextView)findViewById(R.id.detail_text);
+
+        eventdate=getIntent().getStringExtra("Eventdate");
+        Eventdate.setText(eventdate);
+        eventloc=getIntent().getStringExtra("Eventlocation");
+        Eventlocation.setText(eventloc);
         grpDetail.setText(getIntent().getStringExtra("GrpDetails"));
         grpName=getIntent().getStringExtra("GrpName");
+        eventdate=getIntent().getStringExtra("Eventdate");
        // grpid=getIntent().getStringExtra("Grpid");
         setTitle(grpName);
         //  groupName = (Toolbar)findViewById(R.id.toolbar);

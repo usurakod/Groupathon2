@@ -40,36 +40,90 @@
         android:hint="Who can join? What will group do?"
         android:inputType="textMultiLine"/>
 
+
+
+    <TextView
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:id="@+id/datetextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date of Event"
+        android:textSize="25dp"
+        android:layout_below="@+id/detail_text"/>
+    <TextView
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:id="@+id/datetext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/datetextview"
+        android:hint="Select date"
+        android:textSize="20dp"/>
+
     <TextView
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Location"
         android:textSize="25dp"
-        android:layout_below="@+id/detail_text"/>
+        android:layout_below="@+id/datetext"/>
     <EditText
         android:id="@+id/location_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/location"
+        android:hint="Where is the event taking place?"
         android:inputType="text"/>
+    <TextView
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:id="@+id/spinnertext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose category"
+        android:textSize="25dp"
+        android:layout_below="@+id/location_text"/>
+
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="25sp"
         android:autofillHints=""
-        android:layout_below="@+id/location_text" />
+        android:layout_below="@+id/spinnertext" />
 
     <Button
         android:id="@+id/create_button"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinner"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
         android:background="@color/colorAccent"
         android:text="create"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/name"
+        android:text="*" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_text"
+        android:layout_toEndOf="@+id/datetextview"
+        android:text="*" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/location"
+        android:layout_toEndOf="@+id/datetext"
+        android:text="*" />
 
 
 </RelativeLayout>

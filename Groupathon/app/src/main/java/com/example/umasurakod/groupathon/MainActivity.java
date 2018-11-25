@@ -573,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
             emailIds.add( userii);
         }
 
-        if(emailIds.contains(email)){
+        if(emailIds.contains(user.getEmail())){
             return true;
         }
 

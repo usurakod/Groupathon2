@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword;
+    private EditText inputEmail, inputPassword,inputName;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
@@ -42,7 +44,9 @@ public class SignupActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.sign_up_button);
         inputEmail = findViewById(R.id.email);
         inputPassword = findViewById(R.id.password);
+        inputName=findViewById(R.id.displayname);
         progressBar = findViewById(R.id.progressBar);
+
         btnResetPassword = findViewById(R.id.btn_reset_password);
 
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +70,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 final String email = inputEmail.getText().toString().trim();
                 final String password = inputPassword.getText().toString().trim();
+                final String name=inputName.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -76,11 +81,17 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(getApplicationContext(), "Enter name!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (password.length() < 6) {
                     Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+
 
                 progressBar.setVisibility(View.VISIBLE);
                 //create user
@@ -96,6 +107,9 @@ public class SignupActivity extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                 } else {
                                     final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                                    FirebaseUser user=auth.getCurrentUser();
+                                     UserProfileChangeRequest userprofile=new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+                                     user.updateProfile(userprofile);
                                     mDatabase.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

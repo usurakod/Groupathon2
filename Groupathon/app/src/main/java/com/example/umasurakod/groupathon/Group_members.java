@@ -65,7 +65,7 @@ public class Group_members extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 /*if(dataSnapshot.child("User").getValue(String.class)!=null ) {*/
 
-                    names = dataSnapshot.child("User").getValue(String.class);
+                    names = dataSnapshot.child("User Name").getValue(String.class);
 
                     latestGroupmemNames.add(names);
                     images.add(R.drawable.download1);

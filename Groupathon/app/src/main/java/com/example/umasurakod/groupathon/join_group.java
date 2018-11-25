@@ -35,6 +35,7 @@ public class join_group extends AppCompatActivity {
     String groupid,userid;
     String eventdate;
     String eventloc;
+    String myName;
 
 
     @Override
@@ -56,6 +57,7 @@ public class join_group extends AppCompatActivity {
         grpDetail.setText(grpDesc);
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
+        myName = user.getDisplayName();
 
         listItems = (ListView)findViewById(R.id.list_items);
 
@@ -72,6 +74,7 @@ public class join_group extends AppCompatActivity {
                         HashMap<String,String> grpMap = new HashMap<>();
                         grpMap.put("User",email);
                         grpMap.put("Details",grpDesc);
+                        grpMap.put("User Name",myName);
 
                         groupid=joinGroup.push().getKey();
                         HashMap<String,String> userMap = new HashMap<>();

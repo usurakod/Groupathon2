@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -35,6 +39,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
     private DatabaseReference categories;
     private DatabaseReference Usergroups;
     private DatabaseReference joinGroup;
+    private DatabaseReference userName;
     private String currentUID;
     private DatePickerDialog.OnDateSetListener Datelistener;
 
@@ -44,6 +49,9 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
     String emailid;
     String event_date;
     String email;
+    String currentname;
+    String userKey;
+    String myName;
 
 
 
@@ -71,7 +79,8 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
         currentUID = user.getUid();
         emailid=user.getEmail();
         createGroup = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
-
+        userName = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
+        userKey = createGroup.push().getKey();
         Groups=FirebaseDatabase.getInstance().getReference().child("Groups");
 
 
@@ -123,8 +132,13 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     event_date = eventdate.getText().toString();
                     categories = FirebaseDatabase.getInstance().getReference().child("Categories").child(category_Name);
                     Usergroups = FirebaseDatabase.getInstance().getReference().child("Usergroups").child(currentUID);
-                    joinGroup=FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(grp_Name);
+                    joinGroup = FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(grp_Name);
                     email = user.getEmail();
+                    myName=user.getDisplayName();
+                    Toast.makeText(create_group.this, myName, Toast.LENGTH_SHORT).show();
+
+
+
 
                     HashMap<String, String> grpMap = new HashMap<>();
                     grpMap.put("Name", grp_Name);
@@ -151,8 +165,11 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     HashMap<String,String> joinMap = new HashMap<>();
                     joinMap.put("User",email);
                     joinMap.put("Details",grp_Details);
+                    joinMap.put("User Name",myName);
 
                     groupid=joinGroup.push().getKey();
+
+
 
 
 
@@ -218,7 +235,6 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         });
-
 
 
 

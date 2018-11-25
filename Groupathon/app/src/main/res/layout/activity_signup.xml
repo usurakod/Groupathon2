@@ -24,7 +24,14 @@
             android:contentDescription=""
             android:src="@mipmap/ic_launcher"
             tools:ignore="ContentDescription" />
-
+        <EditText
+            android:id="@+id/displayname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:maxLines="1"
+            android:inputType="textPersonName"
+            android:textColor="@android:color/white" />
 
         <EditText
             android:id="@+id/email"

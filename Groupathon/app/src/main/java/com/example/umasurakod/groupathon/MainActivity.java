@@ -86,15 +86,25 @@ public class MainActivity extends AppCompatActivity {
     private  Menu defaultmenu; //Notifications
     private FirebaseUser user;
     List<String> notify_list= new ArrayList<String>();
+    private DatabaseReference createNotification_user;
+    private String Notification="Notification";
+    private String Notification_MSG="Notification_MSG";
+    private int Notification_Count;
+  //  private String Uname=user.getDisplayName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setTitle("Groupathon");
+        //get current user
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        currentUID = user.getUid();
         //setContentView(R.layout.navigation_header);
         //Resources res = getResources();
         //titles=res.getStringArray(R.array.titles);
         //descriptions = res.getStringArray(R.array.description);
+        createNotification_user = FirebaseDatabase.getInstance().getReference().child(Notification).child(user.getDisplayName());
 
         latestGroupNames = new ArrayList<>();
         latestGroupDates=new ArrayList<>();
@@ -147,8 +157,7 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
 
-        //get current user
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
         music = (findViewById(R.id.music_img));
@@ -226,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        currentUID = user.getUid();
+
 
         //groupathonGrpDetails = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
         groupathonGrpDetails = FirebaseDatabase.getInstance().getReference().child("Groups");
@@ -289,7 +298,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Notify new group added
+        createNotification_user.addChildEventListener(new ChildEventListener(){
 
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if(dataSnapshot.child("Notification_MSG").getValue(String.class)!=null) {
+                    String NewNotify = dataSnapshot.child("Notification_MSG").getValue(String.class);
+                    Notification_Count=Notification_Count+1;
+                    Put_Notification_MSGS(NewNotify,Notification_Count);
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         groupathonGrpDetails.addChildEventListener(new ChildEventListener() {
             @Override
@@ -357,10 +399,10 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_notify, menu);
 
-        //return true;
         this.defaultmenu=menu;
-       //remove this after implementing firebase
-        setCount(this, "11");
+        Notification_Count=0;
+       // getImage();
+        setCount(this,Notification_Count); //change this wen item added and member added to existing grp
         return true;
     }
 
@@ -368,10 +410,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
         if(item.getItemId()==R.id.Notifications){
-            //Call Dialog Box
+            //Call Dialog Box with the stacked notification messages
             showDialogBoxMessage("Recent Notifications","Notification1");
             //set count to  after clicked on notifications and clear the alertbox
-            setCount(this,"0");
+            Notification_Count=0;
+            setCount(this,Notification_Count);
+
+            //remove data enrey from firebase
+            createNotification_user.setValue(null);
+            //createNotification_user.
+
         }
         if (mToggle.onOptionsItemSelected(item)) {
             Log.d("MSG",item.toString());
@@ -379,7 +427,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     public void signOut() {
         auth.signOut();
 //        FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
@@ -400,15 +447,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, create_group.class);
         startActivity(intent);
     }
-    // to select item from action bar
 
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 
 
     // this listener will be called when there is change in firebase user session
@@ -493,7 +532,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     //@Prathibha
-    public void setCount(Context context,String count) {
+    public void setCount(Context context,int count) {
+        String Count=Integer.toString(count);
         MenuItem menuItem = defaultmenu.findItem(R.id.Notifications);
         LayerDrawable icon = (LayerDrawable) menuItem.getIcon();
         CountDrawable badge;
@@ -507,33 +547,13 @@ public class MainActivity extends AppCompatActivity {
             badge = new CountDrawable(context);
         }
 
-        badge.setCount(count);
+        badge.setCount(Count);
         icon.mutate();
         icon.setDrawableByLayerId(R.id.ic_group_count, badge);
     }
 
-
- /*   public void showDialogBoxMessage(String title,String Message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(Message);
-        builder.show();
-    }*/
-
     public void showDialogBoxMessage(String title,String msg)
     {
-
-       /* AlertDialog.Builder AB=new AlertDialog.Builder(this);
-        AB.setCancelable(true);
-        AB.setTitle(title);
-        AB.setMessage(msg);
-        AB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //  Toast.makeText(MainActivity.this, "OK",Toast.LENGTH_SHORT).show();
-            }
-        }).show();*/
 
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.notify_list);
@@ -553,6 +573,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //do nothing
+                notify_list.clear();
             }
         }).show();
     }
@@ -579,6 +600,14 @@ public class MainActivity extends AppCompatActivity {
 
         return false;
         }
+
+    //To stack notifications take array list as parameter
+    public void Put_Notification_MSGS(String Notification_MSG,int  Notification_Count){
+//        Toast.makeText(MainActivity.this, Notification_MSG,Toast.LENGTH_SHORT).show();
+        //Notification_Count=+1;
+        setCount(this,Notification_Count);
+        notify_list.add(Notification_MSG);
+    }
 
 }
 

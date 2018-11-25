@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.jar.Attributes;
+
 
 public class create_group extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -41,6 +43,10 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
     private DatabaseReference joinGroup;
     private DatabaseReference userName;
     private String currentUID;
+    MainActivity mainactivity=new MainActivity();
+    private DatabaseReference createNotification_user;
+    private String Notification="Notification";
+    private String NotificationId;
     private DatePickerDialog.OnDateSetListener Datelistener;
 
     String grp_Name,location_Name, category_Name  ;
@@ -82,6 +88,13 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
         userName = FirebaseDatabase.getInstance().getReference().child("users").child(currentUID);
         userKey = createGroup.push().getKey();
         Groups=FirebaseDatabase.getInstance().getReference().child("Groups");
+        createNotification_user = FirebaseDatabase.getInstance().getReference().child(Notification).child(user.getDisplayName());
+        NotificationId=createNotification_user.push().getKey();
+
+        locationName = findViewById(R.id.location_text);
+        details = findViewById(R.id.detail_text);
+        grpName=findViewById(R.id.name_text);
+        create = (Button)findViewById(R.id.create_button);
 
 
         eventdate.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +181,17 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     joinMap.put("User Name",myName);
 
                     groupid=joinGroup.push().getKey();
+                    HashMap<String,String> notify_map = new HashMap<>();
+                    notify_map.put("Notification_MSG","New Group "+grp_Name+" created");
+
+
+                    createNotification_user.child(NotificationId).setValue(notify_map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
+
 
 
 

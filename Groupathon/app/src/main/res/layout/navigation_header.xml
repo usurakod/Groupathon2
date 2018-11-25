@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:id="@+id/chooseImage"
         android:onClick="ChooseImage"
-        android:src="@drawable/addgrp"
-        android:scaleType="fitXY"/>
+        android:src="@drawable/profile1"
+        android:scaleType="fitCenter"/>
 
 </RelativeLayout>

@@ -8,11 +8,7 @@
         android:icon="@mipmap/networking"
         android:title="Joined Groups"/>
 
-    <item android:id="@+id/Notifications"
-        android:icon="@mipmap/bell"
-        android:title="Notifications"/>
-
-    <item android:id="@+id/Settings"
+       <item android:id="@+id/Settings"
         android:icon="@mipmap/settings"
         android:title="Settings"/>
 

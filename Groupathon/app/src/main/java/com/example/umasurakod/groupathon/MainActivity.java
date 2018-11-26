@@ -104,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
         //Resources res = getResources();
         //titles=res.getStringArray(R.array.titles);
         //descriptions = res.getStringArray(R.array.description);
-        createNotification_user = FirebaseDatabase.getInstance().getReference().child(Notification).child(user.getDisplayName());
+
+
+
 
         latestGroupNames = new ArrayList<>();
         latestGroupDates=new ArrayList<>();
@@ -298,40 +300,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Notify new group added
-        createNotification_user.addChildEventListener(new ChildEventListener(){
+        if(user.getDisplayName()!=null) {
+            createNotification_user = FirebaseDatabase.getInstance().getReference().child(Notification).child(user.getDisplayName());
+            //Notify new group added
+            createNotification_user.addChildEventListener(new ChildEventListener() {
 
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                if(dataSnapshot.child("Notification_MSG").getValue(String.class)!=null) {
-                    String NewNotify = dataSnapshot.child("Notification_MSG").getValue(String.class);
-                    Notification_Count=Notification_Count+1;
-                    Put_Notification_MSGS(NewNotify,Notification_Count);
+                    if (dataSnapshot.child("Notification_MSG").getValue(String.class) != null) {
+                        String NewNotify = dataSnapshot.child("Notification_MSG").getValue(String.class);
+                        Notification_Count = Notification_Count + 1;
+                        Put_Notification_MSGS(NewNotify, Notification_Count);
+                    }
+
                 }
 
-            }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                }
 
-            }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                }
 
-            }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
 
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
 
         groupathonGrpDetails.addChildEventListener(new ChildEventListener() {
             @Override

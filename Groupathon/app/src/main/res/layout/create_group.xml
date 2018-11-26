@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<RelativeLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:layout_marginTop="20dp"
+    android:overScrollMode="ifContentScrolls"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical"
     tools:context=".create_group">
-
     <TextView
         android:id="@+id/name"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
@@ -97,6 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinner"
         android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
         android:layout_centerHorizontal="true"
         android:background="@color/colorAccent"
         android:text="create"/>
@@ -107,7 +118,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/name"
-        android:text="*" />
+        android:text=" *" />
 
     <TextView
         android:id="@+id/textView4"
@@ -115,7 +126,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/detail_text"
         android:layout_toEndOf="@+id/datetextview"
-        android:text="*" />
+        android:text=" *" />
 
     <TextView
         android:id="@+id/textView5"
@@ -125,5 +136,15 @@
         android:layout_toEndOf="@+id/datetext"
         android:text="*" />
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/details"
+        android:layout_toEndOf="@+id/details"
+        android:text=" * min 150 characters" />
+
 
 </RelativeLayout>
+</LinearLayout>
+</ScrollView>

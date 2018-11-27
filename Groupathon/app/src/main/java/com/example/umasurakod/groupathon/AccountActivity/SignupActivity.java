@@ -5,12 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.umasurakod.groupathon.Group_details;
 import com.example.umasurakod.groupathon.MainActivity;
 import com.example.umasurakod.groupathon.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,6 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
+    private String Uname;
 
 
     @Override
@@ -71,6 +74,8 @@ public class SignupActivity extends AppCompatActivity {
                 final String email = inputEmail.getText().toString().trim();
                 final String password = inputPassword.getText().toString().trim();
                 final String name=inputName.getText().toString().trim();
+                Uname=name;
+                Log.d("Tag in Signup inside BynSignup",Uname);
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -121,7 +126,13 @@ public class SignupActivity extends AppCompatActivity {
 
                                         }
                                     });
-                                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    /*startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    finish();*/
+                                    Log.d("Tag in Signup outside BynSignup",Uname);
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    intent.putExtra("Username", Uname);
+                                    intent.putExtra("ClassName","SignupActivity");
+                                    startActivity(intent);
                                     finish();
                                 }
                             }

@@ -90,8 +90,9 @@ public class MainActivity extends AppCompatActivity {
     private String Notification="Notification";
     private String Notification_MSG="Notification_MSG";
     private int Notification_Count;
-  //  private String Uname=user.getDisplayName();
-
+    private String Uname;
+    private String NewUname;
+    private String ClassName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +101,20 @@ public class MainActivity extends AppCompatActivity {
         //get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
         currentUID = user.getUid();
+
+       // Uname=user.getDisplayName();
+        NewUname=getIntent().getStringExtra("Username");
+        ClassName=getIntent().getStringExtra("ClassName");
+
+        if((ClassName!=null)&&(ClassName.equals("SignupActivity")))
+        {
+            Uname=NewUname;
+        }else
+        {
+            Uname=user.getDisplayName();
+        }
+        createNotification_user = FirebaseDatabase.getInstance().getReference().child(Notification).child(Uname);
+
         //setContentView(R.layout.navigation_header);
         //Resources res = getResources();
         //titles=res.getStringArray(R.array.titles);
@@ -300,8 +315,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(user.getDisplayName()!=null) {
-            createNotification_user = FirebaseDatabase.getInstance().getReference().child(Notification).child(user.getDisplayName());
+
+            //createNotification_user = FirebaseDatabase.getInstance().getReference().child(Notification).child(user.getDisplayName());
             //Notify new group added
             createNotification_user.addChildEventListener(new ChildEventListener() {
 
@@ -336,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-        }
+
 
         groupathonGrpDetails.addChildEventListener(new ChildEventListener() {
             @Override
@@ -452,7 +467,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, create_group.class);
         startActivity(intent);
     }
+    // to select item from action bar
 
+    /*@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
 
 
     // this listener will be called when there is change in firebase user session

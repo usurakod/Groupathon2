@@ -27,16 +27,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View.OnClickListener;
 
 import com.example.umasurakod.groupathon.AccountActivity.LoginActivity;
 import com.example.umasurakod.groupathon.AccountActivity.SettingActivity;
@@ -51,6 +55,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -66,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView sports;
     private ImageView photography;
     private ImageView other;
+    private EditText searchtext;
+    private ImageButton search,cancel;
     private FirebaseAuth auth;
     private NavigationView navigationView;
     private ListView events;
@@ -77,11 +84,19 @@ public class MainActivity extends AppCompatActivity {
     //int[] images = {R.drawable.download1, R.drawable.download2, R.drawable.download3, R.drawable.download4, R.drawable.download5, R.drawable.download7, R.drawable.download8};
     private DatabaseReference groupathonGrpDetails;
     private DatabaseReference memberDetails;
+    private DatabaseReference GrplocationDetails;
     private ArrayList<String> latestGroupNames ;
     private ArrayList<String> latestGroupDescriptions;
     private ArrayList<String> latestGroupDates ;
     private ArrayList<String> latestGrouplocations;
+
+    private ArrayList<String> SearchlistGroupNames ;
+    private ArrayList<String> SearchlistGroupDescriptions;
+    private ArrayList<String> SearchlistGroupDates ;
+    private ArrayList<String> SearchlistGrouplocations;
+
     private ArrayList<Integer> images;
+    private ArrayList<Integer> images2;
     private String currentUID;
     private  Menu defaultmenu; //Notifications
     private FirebaseUser user;
@@ -93,10 +108,18 @@ public class MainActivity extends AppCompatActivity {
     private String Uname;
     private String NewUname;
     private String ClassName;
+    Boolean flag=false;
+    String  name;
+    String desc;
+    String date;
+    String venue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
         this.setTitle("Groupathon");
         //get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -127,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         latestGroupDates=new ArrayList<>();
         latestGrouplocations=new ArrayList<>();
         latestGroupDescriptions = new ArrayList<>();
+
         images = new ArrayList<>();
 //        events.setAdapter(adapter);
         navigationView = findViewById(R.id.nav_view);
@@ -263,12 +287,13 @@ public class MainActivity extends AppCompatActivity {
         events = findViewById(R.id.events);
 
         //ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(this,R.layout.singlerow_listall,latestGroups);
-        final SushAdapter adapter = new SushAdapter(this, latestGroupNames,latestGroupDescriptions,images);
+        final SushAdapter adapter = new SushAdapter(this, latestGroupNames,latestGrouplocations,images);
         events.setAdapter(adapter);
         events.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
-                String grpName =(String) adapterView.getItemAtPosition(position);
+                TextView textview1 = (TextView) view.findViewById(R.id.textView2);
+                String grpName = textview1.getText().toString();
                 memberDetails = FirebaseDatabase.getInstance().getReferenceFromUrl("https://groupathon.firebaseio.com/Groupmembers/"+grpName);
                 memberDetails.addListenerForSingleValueEvent(
                         new ValueEventListener() {
@@ -277,24 +302,44 @@ public class MainActivity extends AppCompatActivity {
                                 //Get map of users in datasnapshot
 
                                 boolean exists=collectEmailIds((Map<String,Object>) dataSnapshot.getValue());
-                                if(!exists) {
-                                    Intent intent = new Intent(getApplicationContext(), join_group.class);
-                                    intent.putExtra("GrpName", latestGroupNames.get(position));
-                                    intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));
-                                    intent.putExtra("Eventdate", latestGroupDates.get(position));
-                                    intent.putExtra("Eventlocation", latestGrouplocations.get(position));
-                                    startActivity(intent);
+                                if(flag==false) {
+                                    if (!exists) {
+                                        Intent intent = new Intent(getApplicationContext(), join_group.class);
+                                        intent.putExtra("GrpName", latestGroupNames.get(position));
+                                        intent.putExtra("GrpDesc", latestGroupDescriptions.get(position));
+                                        intent.putExtra("Eventdate", latestGroupDates.get(position));
+                                        intent.putExtra("Eventlocation", latestGrouplocations.get(position));
+                                        startActivity(intent);
+                                    } else {
+                                        Intent intent = new Intent(getApplicationContext(), Group_details.class);
+                                        intent.putExtra("GrpName", latestGroupNames.get(position));
+                                        intent.putExtra("GrpDetails", latestGroupDescriptions.get(position));
+                                        intent.putExtra("Eventdate", latestGroupDates.get(position));
+                                        intent.putExtra("Eventlocation", latestGrouplocations.get(position));
+                                        // intent.putExtra("Grpid", groupid);
+                                        startActivity(intent);
+
+                                    }
                                 }
+                                else if(flag==true)
+                                {
+                                    if (!exists) {
+                                        Intent intent = new Intent(getApplicationContext(), join_group.class);
+                                        intent.putExtra("GrpName", SearchlistGroupNames.get(position));
+                                        intent.putExtra("GrpDesc", SearchlistGroupDescriptions.get(position));
+                                        intent.putExtra("Eventdate", SearchlistGroupDates.get(position));
+                                        intent.putExtra("Eventlocation", SearchlistGrouplocations.get(position));
+                                        startActivity(intent);
+                                    } else {
+                                        Intent intent = new Intent(getApplicationContext(), Group_details.class);
+                                        intent.putExtra("GrpName", SearchlistGroupNames.get(position));
+                                        intent.putExtra("GrpDetails", SearchlistGroupDescriptions.get(position));
+                                        intent.putExtra("Eventdate", SearchlistGroupDates.get(position));
+                                        intent.putExtra("Eventlocation", SearchlistGrouplocations.get(position));
+                                        // intent.putExtra("Grpid", groupid);
+                                        startActivity(intent);
 
-                                else{
-                                    Intent intent = new Intent(getApplicationContext(), Group_details.class);
-                                    intent.putExtra("GrpName", latestGroupNames.get(position));
-                                    intent.putExtra("GrpDetails", latestGroupDescriptions.get(position));
-                                    intent.putExtra("Eventdate", latestGroupDates.get(position));
-                                    intent.putExtra("Eventlocation", latestGrouplocations.get(position));
-                                    // intent.putExtra("Grpid", groupid);
-                                    startActivity(intent);
-
+                                    }
                                 }
                             }
 
@@ -352,6 +397,118 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        searchtext=(EditText) findViewById(R.id.searchtext);
+        search=(ImageButton)findViewById(R.id.searchbutton) ;
+        cancel=(ImageButton)findViewById(R.id.cancelbutton) ;
+
+        cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchtext.getText().clear();
+                flag=false;
+                events.setAdapter(adapter);
+            }
+        });
+
+
+        search.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                events.setAdapter(null);
+                flag=true;
+                //Toast.makeText(getApplicationContext(), "Clicked Button", Toast.LENGTH_LONG).show();
+                SearchlistGroupNames = new ArrayList<>();
+                SearchlistGroupDates=new ArrayList<>();
+                SearchlistGrouplocations=new ArrayList<>();
+                SearchlistGroupDescriptions = new ArrayList<>();
+
+                String loc=searchtext.getText().toString();
+                for(int i=0;i<latestGrouplocations.size();i++)
+                {
+                    if((latestGrouplocations.get(i)).equalsIgnoreCase(loc))
+                    {
+                         //Toast.makeText(getApplicationContext(), (latestGrouplocations.get(i)), Toast.LENGTH_LONG).show();
+                         name = latestGroupNames.get(i);
+                         desc = latestGroupDescriptions.get(i);
+                         date = latestGroupDates.get(i);
+                         venue = latestGrouplocations.get(i);
+                         SearchlistGroupNames.add(name);
+                         SearchlistGroupDescriptions.add(desc);
+                         SearchlistGroupDates.add(date);
+                         SearchlistGrouplocations.add(venue);
+                         images.add(R.drawable.download1);
+
+                    }
+                }
+                SushAdapter adapter1=new SushAdapter(getApplicationContext(),SearchlistGroupNames,SearchlistGrouplocations,images);
+                events.setAdapter(adapter1);
+
+
+            }
+        });
+
+
+//        Firebase search
+//        search.setOnClickListener(new OnClickListener() {
+//            @Override
+//           public void onClick(View view) {
+//               //Toast.makeText(getApplicationContext(), "Clicked Button", Toast.LENGTH_LONG).show();
+//                String loc=searchtext.getText().toString();
+//                SearchlistGroupNames = new ArrayList<>();
+//                SearchlistGroupDates=new ArrayList<>();
+//                SearchlistGrouplocations=new ArrayList<>();
+//                SearchlistGroupDescriptions = new ArrayList<>();
+//                images2=new ArrayList<>();
+//
+//                DatabaseReference eventlocations=FirebaseDatabase.getInstance().getReference().child("Eventlocations").child(loc);
+//                eventlocations.addChildEventListener(new ChildEventListener() {
+//                    @Override
+//                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                       if(dataSnapshot.child("Name").getValue(String.class)!=null || dataSnapshot.child("Details").getValue(String.class)!=null) {
+//                           name = dataSnapshot.child("Name").getValue(String.class);
+//                           desc = dataSnapshot.child("Details").getValue(String.class);
+//                           date = dataSnapshot.child("Event Date").getValue(String.class);
+//                           venue = dataSnapshot.child("Location").getValue(String.class);
+//                           SearchlistGroupNames.add(name);
+//                           SearchlistGroupDescriptions.add(desc);
+//                           SearchlistGroupDescriptions.add(desc);
+//                           SearchlistGroupDates.add(date);
+//                           SearchlistGrouplocations.add(venue);
+//                           images2.add(R.drawable.download1);
+//                           images2.add(R.drawable.download2);
+//                          }
+//
+//                           SushAdapter adapter1=new SushAdapter(getApplicationContext(),SearchlistGroupNames,SearchlistGroupDescriptions,images2);
+//                           events.setAdapter(adapter1);
+//                           adapter1.notifyDataSetChanged();
+//                           }
+//
+//                    @Override
+//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                    }
+//
+//                    @Override
+//                   public void onCancelled(DatabaseError databaseError) {
+//
+//                   }
+//               });
+//
+//
+//           }
+//       });
+//
 
         groupathonGrpDetails.addChildEventListener(new ChildEventListener() {
             @Override
@@ -413,6 +570,8 @@ public class MainActivity extends AppCompatActivity {
         String text="Hi, "+user.getDisplayName()+"!";
         MenuItem username=menu.findItem(R.id.Username);
         username.setTitle(text);
+
+
 
     }
     @Override
@@ -523,18 +682,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    static class SushAdapter extends ArrayAdapter<String> {
+    public class SushAdapter extends BaseAdapter {
         Context context;
-        ArrayList<Integer> images;
-        ArrayList<String> titlesArrayList;
-        ArrayList<String> descriptionArray;
+        ArrayList Item;
+        ArrayList SubItem;
+        ArrayList flags;
+        LayoutInflater inflter;
 
-        SushAdapter(Context c, ArrayList<String> groupTitles,ArrayList<String> groupDescriptions, ArrayList<Integer> imgs) {
-            super(c, R.layout.singlerow_listall, R.id.textView2,groupTitles);
-            this.context = c;
-            this.titlesArrayList = groupTitles;
-            this.descriptionArray = groupDescriptions;
-            this.images = imgs;
+        public SushAdapter(Context applicationContext, ArrayList<String> Item, ArrayList<String> SubItem , ArrayList<Integer> flags) {
+            this.context = applicationContext;
+            this.Item = Item;
+            this.SubItem = SubItem;
+            this.flags = flags;
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+            return Item.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.singlerow_listall, null);
+            TextView item = (TextView) view.findViewById(R.id.textView2);
+            TextView subitem = (TextView) view.findViewById(R.id.textView3);
+            ImageView image = (ImageView) view.findViewById(R.id.imageView);
+            item.setText(Item.get(i).toString());
+            subitem.setText(SubItem.get(i).toString());
+            image.setImageResource((int)flags.get(i));
+            return view;
         }
     }
     private void openGallery(){

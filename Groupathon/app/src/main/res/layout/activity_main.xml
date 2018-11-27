@@ -12,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,13 +81,13 @@
 
             <EditText
                 android:id="@+id/searchtext"
-                android:layout_width="342dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="37dp"
                 android:layout_marginTop="12dp"
-                android:hint="Looking for something?"
+                android:hint=" Looking for something nearby?"
                 android:maxLines="1"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -94,11 +96,32 @@
                 android:id="@+id/events"
                 android:layout_width="match_parent"
                 android:layout_height="203dp"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@id/horizontal_scroll"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="0dp"
+                android:layout_alignParentBottom="true"
                 android:layout_marginStart="0dp"
-                android:layout_below="@id/horizontal_scroll"/>
+                android:layout_marginBottom="0dp" />
+
+            <ImageButton
+                android:id="@+id/cancelbutton"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/close2"
+                android:background="@android:color/transparent"/>
+
+            <ImageButton
+                android:id="@+id/searchbutton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/searchtext"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/search6"
+                android:background="@android:color/transparent"/>
         </RelativeLayout>
 
 
@@ -109,7 +132,7 @@
             android:layout_gravity="start"
             app:headerLayout="@layout/navigation_header"
             app:itemTextColor="@android:color/background_dark"
-            app:menu="@menu/menu_navigation"/>
+            app:menu="@menu/menu_navigation" />
     </android.support.v4.widget.DrawerLayout>
 
 

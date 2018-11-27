@@ -135,7 +135,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                             });
                     alertDialog.show();
 
-                } else if(details.getText().toString().length() < 150) {
+                } else if(details.getText().toString().length() < 20) {
                     AlertDialog alertDialog = new AlertDialog.Builder(create_group.this).create();
                     alertDialog.setTitle("Alert");
                     alertDialog.setMessage("Please enter minimum characters for Group Detils field to proceed with group creation");

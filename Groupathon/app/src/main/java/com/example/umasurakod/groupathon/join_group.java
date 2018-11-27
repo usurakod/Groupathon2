@@ -104,6 +104,8 @@ public class join_group extends AppCompatActivity {
                 userid=myJoinGroups.push().getKey();
                 userMap.put("Name",grpName);
                 userMap.put("Details",grpDesc);
+                userMap.put("Eventdate",eventdate);
+                userMap.put("Location",eventloc);
 
                 myJoinGroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

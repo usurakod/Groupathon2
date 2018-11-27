@@ -142,7 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/details"
         android:layout_toEndOf="@+id/details"
-        android:text=" * min 150 characters" />
+        android:text=" * min 20 characters" />
 
 
 </RelativeLayout>

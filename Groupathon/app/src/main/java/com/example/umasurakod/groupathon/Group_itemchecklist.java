@@ -1,11 +1,14 @@
 package com.example.umasurakod.groupathon;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,7 +48,7 @@ public class Group_itemchecklist extends AppCompatActivity {
         addButton = (Button) findViewById(R.id.addItem);
         listItems = new ArrayList<String>();
         grpName=getIntent().getStringExtra("GrpName");
-
+        setTitle(grpName);
         adapter = new Adapter(this, listItems);
         list = findViewById(R.id.list_view);
         list.setAdapter(adapter);
@@ -122,6 +125,19 @@ public class Group_itemchecklist extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.home,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == R.id.Home){
+            startActivity(new Intent(this,MainActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     class Adapter extends ArrayAdapter<String> {

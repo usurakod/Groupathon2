@@ -409,11 +409,12 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-
+        Menu menu = navigationView.getMenu();
+        String text="Hi, "+user.getDisplayName()+"!";
+        MenuItem username=menu.findItem(R.id.Username);
+        username.setTitle(text);
 
     }
-
-    //@Prathibha
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

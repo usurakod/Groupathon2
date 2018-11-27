@@ -140,8 +140,10 @@ public class join_group extends AppCompatActivity {
                         if(dataSnapshot.child("User Name").getValue(String.class)!=null) {
                             //Store emails or username in arrayList
                             String Existing_UName = dataSnapshot.child("User Name").getValue(String.class);
-                            if(Existing_UName==user.getDisplayName()){
-                                //Dont add to firebase
+                           if(Existing_UName==user.getDisplayName()){
+                           //if fetched using uid can we map name and uid in DB? how to map name and UID for all members?
+
+                                    //Dont add to firebase
                             }else {
                                 //Notify this user that current user has been added to the group -->Enter new entry to Notification DB
 

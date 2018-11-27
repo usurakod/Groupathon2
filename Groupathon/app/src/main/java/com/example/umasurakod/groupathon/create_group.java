@@ -123,10 +123,10 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
 
-                if (grpName.getText().toString().isEmpty() || eventdate.getText().toString().isEmpty() || locationName.getText().toString().isEmpty()) {
+                if (grpName.getText().toString().isEmpty() || eventdate.getText().toString().isEmpty() || locationName.getText().toString().isEmpty() || details.getText().toString().isEmpty()) {
                     AlertDialog alertDialog = new AlertDialog.Builder(create_group.this).create();
                     alertDialog.setTitle("Alert");
-                    alertDialog.setMessage("Please fill all mandatory fields to preceed with group creation");
+                    alertDialog.setMessage("Please fill all mandatory fields to proceed with group creation");
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -135,7 +135,20 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                             });
                     alertDialog.show();
 
-                } else {
+                } else if(details.getText().toString().length() < 150) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(create_group.this).create();
+                    alertDialog.setTitle("Alert");
+                    alertDialog.setMessage("Please enter minimum characters for Group Detils field to proceed with group creation");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+                    else
+                {
 
                     //String grp_Name = grpName.getText().toString();
                     String grp_Details = details.getText().toString();

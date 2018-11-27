@@ -74,7 +74,7 @@ public class myJoinedGroups extends AppCompatActivity {
                     //if(dataSnapshot.child("Name").getValue(String.class)!=null || dataSnapshot.child("Details").getValue(String.class)!=null) {
                     grpname = dataSnapshot.child("Name").getValue(String.class);
                     grpdesc = dataSnapshot.child("Details").getValue(String.class);
-                    grpeventdate=dataSnapshot.child("Event Date").getValue(String.class);
+                    grpeventdate=dataSnapshot.child("Eventdate").getValue(String.class);
                     grpeventloc=dataSnapshot.child("Location").getValue(String.class);
                     Groups.add(grpname);
                     Desc.add(grpdesc);

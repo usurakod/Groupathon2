@@ -594,7 +594,10 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setTitle("New Notifications");
 
         ListView lv = (ListView) convertView.findViewById(R.id.lv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,notify_list);
+        if(notify_list.isEmpty()) {
+            notify_list.add("  No new Notification!!..");
+           }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, notify_list);
 
         lv.setAdapter(adapter);
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

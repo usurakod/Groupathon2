@@ -150,7 +150,7 @@ public class join_group extends AppCompatActivity {
                                 //Notify this user that current user has been added to the group -->Enter new entry to Notification DB
 
                                 HashMap<String, String> notify_map = new HashMap<>();
-                                notify_map.put("Notification_MSG", "New Member " + user.getDisplayName() + " joined group " + grpName);//replace with current username
+                                notify_map.put("Notification_MSG", "New Member \"" + user.getDisplayName() + "\" joined group " + grpName);//replace with current username
 
                                 //Hard coded UUID/Username
                                 Db_Reference_Notification.child(Existing_UName).child(NotificationId).setValue(notify_map).addOnCompleteListener(new OnCompleteListener<Void>() {

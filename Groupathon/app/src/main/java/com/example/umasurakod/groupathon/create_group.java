@@ -195,7 +195,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
 
                     groupid=joinGroup.push().getKey();
                     HashMap<String,String> notify_map = new HashMap<>();
-                    notify_map.put("Notification_MSG","New Group "+grp_Name+" created");
+                    notify_map.put("Notification_MSG","New Group \""+grp_Name+"\" created");
 
 
                     createNotification_user.child(NotificationId).setValue(notify_map).addOnCompleteListener(new OnCompleteListener<Void>() {

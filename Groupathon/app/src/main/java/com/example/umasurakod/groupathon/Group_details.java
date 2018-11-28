@@ -45,7 +45,7 @@ public class Group_details extends AppCompatActivity {
         // groupName.setTitle(getIntent().getStringExtra("grpName"));
 
         listItems = (ListView)findViewById(R.id.list_items);
-        final String[] mem_Item = {"Group members                                              >>", "Item Checklist                                                 >>"};
+        final String[] mem_Item = {"Group members", "Item Checklist"};
          ListAdapter myAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mem_Item);
          listItems.setAdapter(myAdapter);
 

@@ -1,6 +1,7 @@
 package com.example.umasurakod.groupathon;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,23 +37,24 @@ public class Category_groups extends AppCompatActivity {
     String description;
     private FirebaseUser user;
     private DatabaseReference memberDetails;
+    ArrayList<String> Groups;
+    ArrayList<String> Desc;
+    ArrayList<Integer> images;
+    ArrayList<String> Dates;
+    ArrayList<String> locs;
+    String grpeventdate,grpeventloc;
+    String grpName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_general);
 
-
-        final ArrayList<String> latestGroupcategoryNames;
-        final ArrayList<String> latestGroupcategoryDescriptions;
-        final ArrayList<String> latestGrouplocations;
-        final ArrayList<String> latestGroupEventdates;
-        final ArrayList<Integer> images;
-
-        latestGroupcategoryNames = new ArrayList<String>();
-        latestGroupcategoryDescriptions = new ArrayList<String>();
-        latestGroupEventdates = new ArrayList<String>();
-        latestGrouplocations = new ArrayList<String>();
+        Groups = new ArrayList<String>();
+        Desc = new ArrayList<String>();
         images = new ArrayList<Integer>();
+        Dates=new ArrayList<String>();
+        locs=new ArrayList<String>();
+
         String category = getIntent().getStringExtra("category");
         setTitle(category);
 
@@ -59,15 +62,17 @@ public class Category_groups extends AppCompatActivity {
 
         myCategory = FirebaseDatabase.getInstance().getReference().child("Categories").child(category);
 
-        final CAdapter adapter = new CAdapter(this, latestGroupcategoryNames, images);
+        final categoryAdapter myAdapter = new categoryAdapter(this, Groups, locs, images);
         list = findViewById(R.id.list_view);
-        list.setAdapter(adapter);
+
+        list.setAdapter(myAdapter);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
 
-                String grpName = (String) adapterView.getItemAtPosition(position);
+                TextView textview1 = (TextView) view.findViewById(R.id.textView2);
+                String grpName = textview1.getText().toString();
                 memberDetails = FirebaseDatabase.getInstance().getReferenceFromUrl("https://groupathon.firebaseio.com/Groupmembers/" + grpName);
                 memberDetails.addListenerForSingleValueEvent(
                         new ValueEventListener() {
@@ -79,17 +84,21 @@ public class Category_groups extends AppCompatActivity {
                                 boolean exists = collectEmailIds((Map<String, Object>) dataSnapshot.getValue());
                                 if (!exists) {
                                     Intent intent = new Intent(getApplicationContext(), join_group.class);
-                                    intent.putExtra("GrpName", latestGroupcategoryNames.get(position));
-                                    intent.putExtra("GrpDesc", latestGroupcategoryDescriptions.get(position));
-                                    intent.putExtra("Eventdate", latestGroupEventdates.get(position));
-                                    intent.putExtra("Eventlocation", latestGrouplocations.get(position));
+                                    intent.putExtra("GrpName", Groups.get(position));
+                                    intent.putExtra("GrpDesc", Desc.get(position));
+/*
+                                    intent.putExtra("Eventdate", Dates.get(position));
+*/
+                                    intent.putExtra("Eventlocation", locs.get(position));
                                     startActivity(intent);
                                 } else {
                                     Intent intent = new Intent(getApplicationContext(), Group_details.class);
-                                    intent.putExtra("GrpName", latestGroupcategoryNames.get(position));
-                                    intent.putExtra("GrpDetails", latestGroupcategoryDescriptions.get(position));
-                                    intent.putExtra("Eventdate", latestGroupEventdates.get(position));
-                                    intent.putExtra("Eventlocation", latestGrouplocations.get(position));
+                                    intent.putExtra("GrpName", Groups.get(position));
+                                    intent.putExtra("GrpDesc", Desc.get(position));
+/*
+                                    intent.putExtra("Eventdate", Dates.get(position));
+*/
+                                    intent.putExtra("Eventlocation", locs.get(position));
                                     // intent.putExtra("Grpid", groupid);
                                     startActivity(intent);
 
@@ -114,12 +123,12 @@ public class Category_groups extends AppCompatActivity {
                 description = dataSnapshot.child("Details").getValue(String.class);
                 date = dataSnapshot.child("Event Date").getValue(String.class);
                 location = dataSnapshot.child("Location").getValue(String.class);
-                latestGroupcategoryNames.add(name);
-                latestGroupcategoryDescriptions.add(description);
-                latestGroupEventdates.add(date);
-                latestGrouplocations.add(location);
+                Groups.add(name);
+                Desc.add(description);
+                Dates.add(date);
+                locs.add(location);
                 images.add(R.drawable.download1);
-                adapter.notifyDataSetChanged();
+                myAdapter.notifyDataSetChanged();
                 /*}*/
             }
 
@@ -145,58 +154,75 @@ public class Category_groups extends AppCompatActivity {
             }
         });
     }
-        private boolean collectEmailIds(Map<String,Object> users) {
-            Intent intent = getIntent();
-            String email = user.getEmail();
-            ArrayList<String> emailIds = new ArrayList<>();
+
+    private boolean collectEmailIds(Map<String,Object> users) {
+        Intent intent = getIntent();
+        String email = user.getEmail();
+        ArrayList<String> emailIds = new ArrayList<>();
 
 
-            for (Map.Entry<String, Object> entry : users.entrySet()){
+        for (Map.Entry<String, Object> entry : users.entrySet()){
 
 
-                Map singleUser = (Map) entry.getValue();
+            Map singleUser = (Map) entry.getValue();
 
-                //String useri=(String)singleUser.get(0);
-                String userii = (String)singleUser.get("User");
-                emailIds.add(userii);
-            }
-
-            if(emailIds.contains(user.getEmail())){
-                return true;
-            }
-
-            return false;
+            //String useri=(String)singleUser.get(0);
+            String userii = (String)singleUser.get("User");
+            emailIds.add(userii);
         }
+
+        if(emailIds.contains(email)){
+            return true;
+        }
+
+        return false;
     }
 
+}
+
+
+class categoryAdapter extends BaseAdapter {
+    Context context;
+    ArrayList Item = new ArrayList<>();
+    ArrayList SubItem = new ArrayList<>();
+    ArrayList flags= new ArrayList<>();
+    LayoutInflater inflter;
 
 
 
-        class CAdapter extends ArrayAdapter<String> {
-            private final Activity activity;
-            private final ArrayList<String> groupname;
-            private final ArrayList<Integer> image;
 
-            public CAdapter(Activity activity, ArrayList<String> groupname, ArrayList<Integer> image) {
-                super(activity, R.layout.category_groups, groupname);
-                this.activity = activity;
-                this.groupname = groupname;
-                this.image = image;
-            }
+    public categoryAdapter(Context applicationContext, ArrayList<String> Item, ArrayList<String> SubItem , ArrayList<Integer> flags) {
+        this.context = applicationContext;
+        this.Item = Item;
+        this.SubItem = SubItem;
+        this.flags = flags;
+        inflter = (LayoutInflater.from(applicationContext));
+    }
 
-            public View getView(int position, View view, ViewGroup parent) {
-                LayoutInflater inflater = activity.getLayoutInflater();
-                View rowView = inflater.inflate(R.layout.category_groups, null, true);
+    @Override
+    public int getCount() {
+        return Item.size();
+    }
 
-                TextView group_name = (TextView) rowView.findViewById(R.id.groupName);
-                ImageView imageView = (ImageView) rowView.findViewById(R.id.group_icon);
+    @Override
+    public Object getItem(int i) {
+        return null;
+    }
 
-                group_name.setText(groupname.get(position));
-                imageView.setImageResource(image.get(position));
-                return rowView;
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
 
-            }
-        }
-
-
-
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        view = inflter.inflate(R.layout.singlerow_listall, null);
+        TextView item = (TextView) view.findViewById(R.id.textView2);
+        TextView subitem = (TextView) view.findViewById(R.id.textView3);
+        ImageView image = (ImageView) view.findViewById(R.id.imageView);
+        item.setText(Item.get(i).toString());
+        subitem.setText(SubItem.get(i).toString());
+        image.setImageResource((int)flags.get(i));
+        return view;
+    }
+}

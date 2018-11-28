@@ -8,7 +8,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -16,8 +15,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-
-import android.content.Intent;
 
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -35,25 +32,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
 import com.example.umasurakod.groupathon.AccountActivity.LoginActivity;
 import com.example.umasurakod.groupathon.AccountActivity.SettingActivity;
-import com.example.umasurakod.groupathon.AccountActivity.SignupActivity;
-import com.example.umasurakod.groupathon.R;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -61,7 +51,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -74,7 +63,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import android.content.res.Resources;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout myDrawerLayout;
@@ -178,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
                 int id = item.getItemId();
 
 
@@ -453,7 +441,7 @@ public class MainActivity extends AppCompatActivity {
                          SearchlistGroupDescriptions.add(desc);
                          SearchlistGroupDates.add(date);
                          SearchlistGrouplocations.add(venue);
-                         images.add(R.drawable.download1);
+
 
                     }
                 }
@@ -542,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
                     images.add(R.drawable.musicnew);
                     images.add(R.drawable.hackingnew);
                     images.add(R.drawable.hickingnew);
-                    images.add(R.drawable.sportsnew);
+                    images.add(R.drawable.sportsnewone);
                     images.add(R.drawable.photonew);
                     images.add(R.drawable.othernew);
 
@@ -592,14 +580,14 @@ public class MainActivity extends AppCompatActivity {
         if(user.getDisplayName()!=null) {
 
             Menu menu = navigationView.getMenu();
-            String text = "Hi, " + user.getDisplayName() + "!";
+            String text = "Hello, " + user.getDisplayName() + "!";
             MenuItem username = menu.findItem(R.id.Username);
             username.setTitle(text);
         }
         else{
             Menu menu = navigationView.getMenu();
             String uname=getIntent().getStringExtra("Username");
-            String text = "Hi, " +uname + "!";
+            String text = "Hello, " +uname + "!";
             MenuItem username = menu.findItem(R.id.Username);
             username.setTitle(text);
 

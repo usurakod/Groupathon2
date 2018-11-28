@@ -1,9 +1,7 @@
 package com.example.umasurakod.groupathon;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -87,7 +84,7 @@ public class my_grouplist extends AppCompatActivity {
                     images.add(R.drawable.musicnew);
                     images.add(R.drawable.hackingnew);
                     images.add(R.drawable.hickingnew);
-                    images.add(R.drawable.sportsnew);
+                    images.add(R.drawable.sportsnewone);
                     images.add(R.drawable.photonew);
                     images.add(R.drawable.othernew);
                     adapter.notifyDataSetChanged();

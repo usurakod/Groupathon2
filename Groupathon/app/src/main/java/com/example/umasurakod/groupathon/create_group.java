@@ -163,7 +163,7 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     joinGroup = FirebaseDatabase.getInstance().getReference().child("Groupmembers").child(grp_Name);
                     email = user.getEmail();
                     myName=user.getDisplayName();
-                    Toast.makeText(create_group.this, myName, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(create_group.this, myName, Toast.LENGTH_SHORT).show();
 
 
 
@@ -200,20 +200,20 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     notify_map.put("Notification_MSG","New Group \""+grp_Name+"\" created");
 
 
-                    createNotification_user.child(NotificationId).setValue(notify_map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    /*createNotification_user.child(NotificationId).setValue(notify_map).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
 
                         }
-                    });
+                    });*/
                     Usergroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
-                            }
+//                            if (task.isSuccessful()) {
+//                                Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
+//                            }
                         }
                     });
 
@@ -222,18 +222,18 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                         public void onComplete(@NonNull Task<Void> task) {
 
 
-                            if (task.isSuccessful()) {
-                                Toast.makeText(create_group.this, "Group Created Successfully", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(create_group.this, "Could not create Group, please contact the customer care", Toast.LENGTH_SHORT).show();
-                            }
+//                            if (task.isSuccessful()) {
+//                                Toast.makeText(create_group.this, "Group Created Successfully", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Toast.makeText(create_group.this, "Could not create Group, please contact the customer care", Toast.LENGTH_SHORT).show();
+//                            }
                         }
                     });
                     Groups.push().setValue(grpMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(create_group.this, "Group created successfully", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
                             }
@@ -243,11 +243,11 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     categories.child(groupid).setValue(categorymap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
-                            }
+//                            if (task.isSuccessful()) {
+//                                Toast.makeText(create_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Toast.makeText(create_group.this, "Could not add Group, please contact the customer care", Toast.LENGTH_SHORT).show();
+//                            }
                         }
                     });
 
@@ -256,12 +256,12 @@ public class create_group extends AppCompatActivity implements AdapterView.OnIte
                     joinGroup.child(userid).setValue(joinMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(create_group.this, "Joined Successfully", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(create_group.this,"Could not join, please contact the customer care",Toast.LENGTH_SHORT).show();
-                            }
+//                            if(task.isSuccessful()){
+//                                Toast.makeText(create_group.this, "Joined Successfully", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else{
+//                                Toast.makeText(create_group.this,"Could not join, please contact the customer care",Toast.LENGTH_SHORT).show();
+//                            }
                         }
                     });
                     goTocreatedPg();

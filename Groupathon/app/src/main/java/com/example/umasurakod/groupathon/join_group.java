@@ -112,12 +112,12 @@ public class join_group extends AppCompatActivity {
                 myJoinGroups.child(userid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(join_group.this, "Group added Successfully", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(join_group.this,"Could not add Group, please contact the customer care",Toast.LENGTH_SHORT).show();
-                        }
+//                        if(task.isSuccessful()){
+//                            Toast.makeText(join_group.this, "Joined Group Successfully", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else{
+//                            Toast.makeText(join_group.this,"Could not join Group, please contact the customer care",Toast.LENGTH_SHORT).show();
+//                        }
                     }
                 });
 
@@ -127,10 +127,10 @@ public class join_group extends AppCompatActivity {
 
 
                         if(task.isSuccessful()){
-                            Toast.makeText(join_group.this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(join_group.this, "Joined Group Successfully", Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            Toast.makeText(join_group.this,"Could not add, please contact the customer care",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(join_group.this,"Could not Join Group, please contact the customer care",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

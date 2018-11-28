@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+
     <item android:id="@+id/Username"
         android:icon="@mipmap/user1"
         android:title="Username"/>
+    </group>
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/detail_text"
-        android:background="@color/common_google_signin_btn_text_dark_focused"/>
+
+
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="none">
 
     <item android:id="@+id/mygroups"
         android:icon="@mipmap/networking"
@@ -26,5 +31,6 @@
     <item android:id="@+id/Logout"
         android:icon="@mipmap/logout_color"
         android:title="Logout"/>
+    </group>
 
 </menu>

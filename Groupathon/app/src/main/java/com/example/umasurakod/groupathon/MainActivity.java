@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Category_groups.class);
-                intent.putExtra("category","music");
+                intent.putExtra("category","Music");
                 startActivity(intent);
 
             }
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Category_groups.class);
-                intent.putExtra("category","hacking");
+                intent.putExtra("category","Hacking");
                 startActivity(intent);
 
             }
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Category_groups.class);
-                intent.putExtra("category","hiking");
+                intent.putExtra("category","Hiking");
                 startActivity(intent);
             }
         });
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Category_groups.class);
-                intent.putExtra("category","sports");
+                intent.putExtra("category","Sports");
                 startActivity(intent);
             }
         });
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Category_groups.class);
-                intent.putExtra("category","photography");
+                intent.putExtra("category","Photography");
                 startActivity(intent);
             }
         });

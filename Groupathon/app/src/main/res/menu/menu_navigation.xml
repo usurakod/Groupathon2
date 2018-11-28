@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/Username"
+        android:icon="@mipmap/user1"
+        android:title="Username"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/detail_text"
+        android:background="@color/common_google_signin_btn_text_dark_focused"/>
+
     <item android:id="@+id/mygroups"
         android:icon="@mipmap/networking"
         android:title="My Groups"/>

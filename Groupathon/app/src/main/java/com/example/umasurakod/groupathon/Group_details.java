@@ -3,6 +3,8 @@ package com.example.umasurakod.groupathon;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -66,5 +68,18 @@ public class Group_details extends AppCompatActivity {
                     }
                     }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.home,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == R.id.Home){
+            startActivity(new Intent(this,MainActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

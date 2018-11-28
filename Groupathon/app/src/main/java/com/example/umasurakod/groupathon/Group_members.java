@@ -40,6 +40,7 @@ public class Group_members extends AppCompatActivity {
         final ArrayList<String> latestGroupmemNames ;
         final ArrayList<Integer> images ;
         grpname=getIntent().getStringExtra("GrpName");
+        setTitle(grpname);
         latestGroupmemNames=new ArrayList<String>();
         images=new ArrayList<Integer>();
 
@@ -58,8 +59,6 @@ public class Group_members extends AppCompatActivity {
 
             }
             });
-
-
         groupmembers.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -98,6 +97,7 @@ public class Group_members extends AppCompatActivity {
         });
         }
 
+
     class Adapter extends ArrayAdapter<String> {
         private final Activity activity;
         private final ArrayList<String> mem_name;
@@ -122,5 +122,7 @@ public class Group_members extends AppCompatActivity {
             return rowView;
 
         }
+
+
     }
 }

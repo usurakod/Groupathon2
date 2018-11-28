@@ -1,6 +1,7 @@
 package com.example.umasurakod.groupathon.AccountActivity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class SignupActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         btnSignIn = findViewById(R.id.sign_in_button);
+        btnSignIn.setPaintFlags(btnSignIn.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         btnSignUp = findViewById(R.id.sign_up_button);
         inputEmail = findViewById(R.id.email);
         inputPassword = findViewById(R.id.password);
@@ -51,6 +53,9 @@ public class SignupActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         btnResetPassword = findViewById(R.id.btn_reset_password);
+
+        btnResetPassword.setPaintFlags(btnResetPassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
 
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override

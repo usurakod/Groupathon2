@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="interests">
-        <item>music</item>
-        <item>hacking</item>
-        <item>hiking</item>
-        <item>sports</item>
-        <item>photography</item>
-        <item>others</item>
+        <item>Music</item>
+        <item>Hacking</item>
+        <item>Hiking</item>
+        <item>Sports</item>
+        <item>Photography</item>
+        <item>Others</item>
     </string-array>
 </resources>

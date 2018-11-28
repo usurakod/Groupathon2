@@ -539,8 +539,12 @@ public class MainActivity extends AppCompatActivity {
                     latestGroupDescriptions.add(descriptions);
                     latestGroupDates.add(dates);
                     latestGrouplocations.add(loc);
-                    images.add(R.drawable.download1);
-                    images.add(R.drawable.download2);
+                    images.add(R.drawable.musicnew);
+                    images.add(R.drawable.hackingnew);
+                    images.add(R.drawable.hickingnew);
+                    images.add(R.drawable.sportsnew);
+                    images.add(R.drawable.photonew);
+                    images.add(R.drawable.othernew);
 
                     adapter.notifyDataSetChanged();
                 }
@@ -583,10 +587,23 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        Menu menu = navigationView.getMenu();
-        String text="Hi, "+user.getDisplayName()+"!";
-        MenuItem username=menu.findItem(R.id.Username);
-        username.setTitle(text);
+
+
+        if(user.getDisplayName()!=null) {
+
+            Menu menu = navigationView.getMenu();
+            String text = "Hi, " + user.getDisplayName() + "!";
+            MenuItem username = menu.findItem(R.id.Username);
+            username.setTitle(text);
+        }
+        else{
+            Menu menu = navigationView.getMenu();
+            String uname=getIntent().getStringExtra("Username");
+            String text = "Hi, " +uname + "!";
+            MenuItem username = menu.findItem(R.id.Username);
+            username.setTitle(text);
+
+        }
 
 
 

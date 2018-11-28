@@ -4,13 +4,17 @@ package com.example.umasurakod.groupathon;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
 import android.content.Intent;
@@ -47,6 +51,8 @@ import com.example.umasurakod.groupathon.AccountActivity.SettingActivity;
 import com.example.umasurakod.groupathon.AccountActivity.SignupActivity;
 import com.example.umasurakod.groupathon.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,10 +63,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import android.content.res.Resources;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout myDrawerLayout;
@@ -81,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     String titles;
     String descriptions;
     String dates,loc;
+    Uri selectedImage;
     //int[] images = {R.drawable.download1, R.drawable.download2, R.drawable.download3, R.drawable.download4, R.drawable.download5, R.drawable.download7, R.drawable.download8};
     private DatabaseReference groupathonGrpDetails;
     private DatabaseReference memberDetails;
@@ -109,17 +124,19 @@ public class MainActivity extends AppCompatActivity {
     private String NewUname;
     private String ClassName;
     Boolean flag=false;
-    String  name;
-    String desc;
-    String date;
-    String venue;
+    String  name,desc, date,venue;
+    //@Prathibha ProfilePhoto
+    FirebaseStorage storage;
+    StorageReference storageReference;
+    private Bitmap my_image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
         this.setTitle("Groupathon");
         //get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -522,8 +539,12 @@ public class MainActivity extends AppCompatActivity {
                     latestGroupDescriptions.add(descriptions);
                     latestGroupDates.add(dates);
                     latestGrouplocations.add(loc);
-                    images.add(R.drawable.download1);
-                    images.add(R.drawable.download2);
+                    images.add(R.drawable.musicnew);
+                    images.add(R.drawable.hackingnew);
+                    images.add(R.drawable.hickingnew);
+                    images.add(R.drawable.sportsnew);
+                    images.add(R.drawable.photonew);
+                    images.add(R.drawable.othernew);
 
                     adapter.notifyDataSetChanged();
                 }
@@ -566,10 +587,23 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        Menu menu = navigationView.getMenu();
-        String text="Hi, "+user.getDisplayName()+"!";
-        MenuItem username=menu.findItem(R.id.Username);
-        username.setTitle(text);
+
+
+        if(user.getDisplayName()!=null) {
+
+            Menu menu = navigationView.getMenu();
+            String text = "Hi, " + user.getDisplayName() + "!";
+            MenuItem username = menu.findItem(R.id.Username);
+            username.setTitle(text);
+        }
+        else{
+            Menu menu = navigationView.getMenu();
+            String uname=getIntent().getStringExtra("Username");
+            String text = "Hi, " +uname + "!";
+            MenuItem username = menu.findItem(R.id.Username);
+            username.setTitle(text);
+
+        }
 
 
 
@@ -581,7 +615,8 @@ public class MainActivity extends AppCompatActivity {
 
         this.defaultmenu=menu;
         Notification_Count=0;
-       // getImage();
+        //@Prathibha FirebaseCall for ProfilePic
+        getImage();
         setCount(this,Notification_Count); //change this wen item added and member added to existing grp
         return true;
     }
@@ -729,22 +764,10 @@ public class MainActivity extends AppCompatActivity {
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, SELECT_PHOTO);
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case SELECT_PHOTO:
-                if (resultCode == RESULT_OK) {
-                    Uri selectedImage = data.getData();
-                    if (selectedImage != null) {
-                        chooseImage.setImageURI(selectedImage);
-                    }
-                }
-        }
-    }
 
-    public void ChooseImage(View v){
+  /*  public void ChooseImage(View v){
         openGallery();
-    }
+    }*/
 
 
     //@Prathibha
@@ -782,7 +805,10 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setTitle("New Notifications");
 
         ListView lv = (ListView) convertView.findViewById(R.id.lv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,notify_list);
+        if(notify_list.isEmpty()) {
+            notify_list.add("  No new Notification!!..");
+           }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, notify_list);
 
         lv.setAdapter(adapter);
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -823,6 +849,105 @@ public class MainActivity extends AppCompatActivity {
         //Notification_Count=+1;
         setCount(this,Notification_Count);
         notify_list.add(Notification_MSG);
+    }
+
+    public void ChooseImage(View v){
+        openGallery();
+    }
+
+    public void getImage(){
+
+        String my_image_path="images/"+currentUID.toString();
+        Log.d("Image path",my_image_path);
+        StorageReference ref;
+       // if(storage.getReference().child(my_image_path).equals(null)) {
+
+        //}
+        try {
+            ref = storage.getReference().child(my_image_path);
+        }
+        catch (Exception e){
+            my_image_path="images/profile1.jpg";
+            Log.d("Image path",my_image_path);
+            Log.d("Image path",my_image_path+storage.getReference());
+            ref = storage.getReference().child(my_image_path);
+
+        }
+        try {
+            final File localFile = File.createTempFile("Images", "bmp");
+            ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener< FileDownloadTask.TaskSnapshot >() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    my_image = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    chooseImage.setImageBitmap(my_image);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    //retain default profile image
+                    // Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void uploadImage_toFirebase() {
+        if(selectedImage != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("images/"+ currentUID.toString());
+            ref.putFile(selectedImage)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    selectedImage = data.getData();
+
+                    if (selectedImage != null) {
+                        chooseImage.setImageURI(selectedImage);
+                        //store in firebase
+
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                            chooseImage.setImageBitmap(bitmap);
+                            uploadImage_toFirebase();
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        }
     }
 
 }

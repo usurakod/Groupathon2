@@ -142,6 +142,8 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        email.setText( user.getEmail());
+
     }
 
     FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
@@ -167,7 +169,7 @@ public class SettingActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void setDataToView(FirebaseUser user) {
 
-        email.setText("User Email: " + user.getEmail());
+
 
 
     }

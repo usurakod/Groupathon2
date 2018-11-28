@@ -12,25 +12,47 @@
         android:gravity="center"
         android:hint="@string/email_id"
         android:textSize="30sp"
+        android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold|italic" />
+
 
     <EditText
         android:id="@+id/old_email"
-        android:layout_width="500dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
-        android:maxLines="1"
-        />
+        android:maxLines="1" />
 
+
+
+<LinearLayout
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:orientation="horizontal">
     <EditText
         android:id="@+id/newPassword"
-        android:layout_width="500dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:hint="@string/new_pass"
         android:imeOptions="actionUnspecified"
         android:inputType="textPassword"
         android:maxLines="1" />
+
+    <Button
+        android:id="@+id/changePass"
+        style="?android:textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="25dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/btn_change"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+</LinearLayout>
+
 
     <EditText
         android:id="@+id/password"
@@ -48,6 +70,10 @@
         style="?android:textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
         android:text="@string/change_password"
         android:textStyle="bold" />
 
@@ -56,6 +82,11 @@
         style="?android:textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:text="@string/remove_user"
         android:textStyle="bold" />
 
@@ -69,16 +100,6 @@
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/changePass"
-        style="?android:textAppearanceSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/btn_change"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        />
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
